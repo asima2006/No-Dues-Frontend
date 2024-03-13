@@ -16,8 +16,26 @@ const AuthState = (props) => {
     }
   };
 
+  const handleDepGET = async () => {
+    const res = await fetch(`${host}/department/login`, {
+      method: 'GET',
+    });
+    const data = res.status;
+    console.log(data);
+    if (data == 401 || data == 409) {
+      console.log("Unauthenticated");
+      alert("Unauthenticated");
+      window.location.href = '/login-dep';
+    } else if (data == 200) {
+      alert("Success");
+      window.location.href = '/dep';
+    }
+  }
+
+
   const contextValues = {
     handleLogin,
+    handleDepGET,
   };
   return (
     <AuthContext.Provider value={contextValues}>

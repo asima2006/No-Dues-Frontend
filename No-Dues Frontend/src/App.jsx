@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import LoginDep from './pages/LoginDep'
-import LoginStud from './pages/LoginStud'
+import StudDash from './pages/StudDash'
 import New from './pages/New'
 import Nav from './components/Nav'
 import AuthState from './context/auth/authState'
@@ -15,9 +15,10 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/new' element={<New />} />
-          <Route path='/login-stud' element={<LoginStud />} />
+          <Route path='/stud' element={<StudDash />} />
           <Route path='/login-dep' element={<LoginDep />} />
           <Route path='/callback' element={<CallBack />} />
+          <Route path='/dep' element={<Home/>} />
         </Routes>
       </BrowserRouter>
     </AuthState>

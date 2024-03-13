@@ -23,24 +23,20 @@ CallBack = () => {
             }),
           });
 
-          console.log(response.message);
+          console.log(response.statusText);
 
-          // Assuming the backend returns a successful response
           if (response.status === 200) {
-            // Redirect to your application page on port 5173
-            window.location.href = 'http://localhost:5173/';
+            // window.location.href = 'http://localhost:5173/';
+            navigate('/')
           } else {
-            // Handle unsuccessful login
             console.error('Login failed');
           }
         }
       } catch (error) {
-        // Handle errors
         console.error('Error during login:', error);
       }
     };
 
-    // Call the function to handle Microsoft authentication when the URL changes
     handleMicrosoftAuthentication();
   }, [location.search]);
 

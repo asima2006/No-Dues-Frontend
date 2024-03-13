@@ -1,10 +1,10 @@
-import React, { useContext} from 'react'
+import React, { useContext } from 'react'
 import logo from '/logo1.jpg'
 import authContext from '../context/auth/authContext'
 
 const New = () => {
     const context = useContext(authContext);
-    const { handleLogin } = context;
+    const { handleLogin, handleDepGET } = context;
     return (
         <div className='flex flex-col'>
             <div className="flex items-center justify-center">
@@ -21,6 +21,7 @@ const New = () => {
                     Login As Student
                 </button>
                 <button
+                    onClick={handleDepGET}
                     className="bg-[#172554] p-3 hover:bg-[#60a5fa]-700 text-white font-bold transition-transform transform hover:-translate-y-2 py-2 px-4 rounded mr-6"
                 >
                     Login As Departments
