@@ -21,7 +21,7 @@ const LoginDep = () => {
         },
         body: JSON.stringify(formstate)
       });
-      if (res.status == 200) navigate('/');
+      if (res.status == 200) navigate('/dep');
       else console.log("Invalid credentials!!");
     } catch (error) {
       console.log(error);

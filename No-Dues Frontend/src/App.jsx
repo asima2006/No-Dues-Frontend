@@ -6,6 +6,7 @@ import New from './pages/New'
 import Nav from './components/Nav'
 import AuthState from './context/auth/authState'
 import CallBack from './pages/CallBack'
+import DepDash from './pages/DepDash'
 
 const App = () => {
   return (
@@ -18,7 +19,7 @@ const App = () => {
           <Route path='/stud' element={<StudDash />} />
           <Route path='/login-dep' element={<LoginDep />} />
           <Route path='/callback' element={<CallBack />} />
-          <Route path='/dep' element={<Home/>} />
+          <Route path='/dep' element={<DepDash/>} />
         </Routes>
       </BrowserRouter>
     </AuthState>
