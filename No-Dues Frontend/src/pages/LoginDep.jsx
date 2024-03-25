@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import authContext from "../context/auth/authContext";
 
 const LoginDep = () => {
+  const context = useContext(authContext);
+  const { token,setToken } = context
   const [formstate, setFormState] = useState({});
+
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormState({
@@ -21,13 +25,15 @@ const LoginDep = () => {
         },
         body: JSON.stringify(formstate)
       });
+      const data = await res.json()
+      setToken(() => data.token)
+      console.log(token);
       if (res.status == 200) navigate('/dep');
       else console.log("Invalid credentials!!");
     } catch (error) {
       console.log(error);
     }
   }
-
 
   // console.log(formstate);
   return (

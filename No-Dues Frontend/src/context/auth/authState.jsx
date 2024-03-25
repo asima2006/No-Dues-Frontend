@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AuthContext from './authContext'
 
 const AuthState = (props) => {
+  // console.log("Working");
+  const [token, setToken] = useState("");
   const host = 'http://localhost:8000'
+
   const handleLogin = async () => {
     console.log("Work-1");
     const res = await fetch(`${host}/student/login`, {
@@ -21,7 +24,6 @@ const AuthState = (props) => {
       method: 'GET',
     });
     const data = res.status;
-    console.log(data);
     if (data == 401 || data == 409) {
       console.log("Unauthenticated");
       alert("Unauthenticated");
@@ -33,7 +35,10 @@ const AuthState = (props) => {
   }
 
 
+
   const contextValues = {
+    token,
+    setToken,
     handleLogin,
     handleDepGET,
   };
