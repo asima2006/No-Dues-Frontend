@@ -1,10 +1,38 @@
-import React, { useContext } from 'react'
+import { useRecoilValue } from 'recoil'
 import logo from '/logo1.jpg'
-import authContext from '../context/auth/authContext'
+import { authState, userTypeValues } from '../context/auth/authState';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 const New = () => {
-    const context = useContext(authContext);
-    const { handleLogin, handleDepGET } = context;
+    const context = useRecoilValue(authState);
+    const { token , userType } = context;
+    const backendUri = 'http://localhost:8000'
+    const navigator  = useNavigate();
+
+    const handleDepGET = async () => {
+        if(token === null ||  userType !== userTypeValues.department ){
+            navigator('/login-dep');
+        }
+
+        const response = await fetch(`${backendUri}/department/login`,{
+            method:'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+
+        const resp = await response.json();
+        console.log(resp);
+
+    }
+
+    const handleLogin = async() => {
+        console.log('login clicked')
+    }
+
     return (
         <div className='flex flex-col'>
             <div className="flex items-center justify-center">

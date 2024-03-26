@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { authState, userTypeValues} from "../context/auth/authState";
 import { useNavigate } from "react-router-dom";
-import authContext from "../context/auth/authContext";
 
 const LoginDep = () => {
-  const context = useContext(authContext);
-  const { token,setToken } = context
   const [formstate, setFormState] = useState({});
+  const setAuth = useSetRecoilState(authState);
+  const navigator = useNavigate()
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormState({
       ...formstate,
@@ -18,37 +18,58 @@ const LoginDep = () => {
   const handleDepPOST = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/department/login", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formstate)
-      });
-      const data = await res.json()
-      setToken(() => data.token)
-      console.log(token);
-      if (res.status == 200) navigate('/dep');
-      else console.log("Invalid credentials!!");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      const host = "http://localhost:8000";
 
-  // console.log(formstate);
+      const response = await fetch(`${host}/department/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formstate.username,
+          password: formstate.password,
+        }),
+      });
+
+      if (response.ok) {
+        const { token } = await response.json();
+
+        setAuth({
+          isAuthenticated: true,
+          token: token,
+          userType: userTypeValues.department
+        });
+        console.log("Login successful");
+        navigator('/dues')
+      } else {
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Department Login</h1>
+      <h1 className="text-3xl text-center font-semibold my-7">
+        Department Login
+      </h1>
       <form className="flex flex-col gap-4" onSubmit={handleDepPOST}>
         <input
-          type="username" placeholder="Username" className="border p-3 rounded-lg" id="username" onChange={handleChange}
+          type="username"
+          placeholder="Username"
+          className="border p-3 rounded-lg"
+          id="username"
+          onChange={handleChange}
         />
         <input
-          type="password" placeholder="Password" className="border p-3 rounded-lg" id="password" onChange={handleChange}
+          type="password"
+          placeholder="Password"
+          className="border p-3 rounded-lg"
+          id="password"
+          onChange={handleChange}
         />
-        <button
-          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
-        >
+        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
           Login
         </button>
       </form>

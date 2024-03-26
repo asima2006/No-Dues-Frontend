@@ -6,7 +6,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StickyHeadTable from '../components/Table'
 import Header from '../components/Nav';
 import Role from '../components/Role';
-import authContext from '../context/auth/authContext';
+import CreateDueForm from '../components/CreateDueForm';
+import GenericModal from '../components/GenericModal';
 
 const Due = () => {
     const context = useContext(authContext);
@@ -39,8 +40,17 @@ const Due = () => {
                 <MenuItem onClick={handleClose}>B.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>M.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>PHD</MenuItem>
+                <MenuItem>Hello</MenuItem>
             </Menu>
-            <StickyHeadTable rows = {rows}/>
+            <GenericModal
+                buttonName="Open Modal"
+                modalTitle="Example Modal"
+            >
+                <CreateDueForm />
+            </GenericModal>
+            <StickyHeadTable/>
+
+
         </div>
     )
 }

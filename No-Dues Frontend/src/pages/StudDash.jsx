@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import authContext from '../context/auth/authContext'
+
 
 const StudDash = () => {
   return (

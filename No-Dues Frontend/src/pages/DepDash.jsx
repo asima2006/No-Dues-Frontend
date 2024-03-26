@@ -1,8 +1,8 @@
-import React, {  useContext, useState } from 'react'
-import authContext from '../context/auth/authContext';
+import React, { useState } from 'react'
+import { authState } from '../context/auth/authState';
 
 const DepDash = () => {
-  const context = useContext(authContext);
+  const context = useRecoilValue(authState);
   const { token } = context
   const [formstate, setFormState] = useState({});
   const handleChange = (e) => {
