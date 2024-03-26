@@ -13,11 +13,6 @@ const Header = () => {
                         <span className='text-slate-700'>DUES</span>
                     </h1>
                 </Link>
-                <form className='bg-slate-100 p-2 rounded-lg flex items-center'>
-                    <input type="text" placeholder='Search...' className='bg-transparent focus:outline-none w-24 sm:w-64' />
-                    <FaSearch className='text-slate-500' />
-                </form>
-                <Role/>
             </div>
         </header>
     )

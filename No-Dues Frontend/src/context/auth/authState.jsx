@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import AuthContext from './authContext'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuthState = (props) => {
   // console.log("Working");
   const [token, setToken] = useState("");
+  const [rows, setRows] = useState([]);
   const host = 'http://localhost:8000'
 
   const handleLogin = async () => {
@@ -34,11 +37,25 @@ const AuthState = (props) => {
     }
   }
 
-
+  const fetchDues = async () => {
+    try {
+      const res = await fetch(`${host}/department/dues`,{
+          method: "GET",
+          "Authorization": `Bearer ${token}`,
+      });
+      console.log(token);
+      const data = await res.json();
+      setRows(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const contextValues = {
     token,
     setToken,
+    rows,
+    fetchDues,
     handleLogin,
     handleDepGET,
   };

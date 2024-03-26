@@ -15,98 +15,98 @@ import {
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const rows = [
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-  {
-    amount: 100,
-    "due-date": "2020-01-01",
-    status: "DueStatus.pending",
-    reason: "Hostel",
-    createdAt: "2020-03-09",
-  },
-];
 
-const columns = [
-  {
-    id: "reason",
-    label: "Department",
-    minWidth: 100,
-  },
-  {
-    id: "amount",
-    label: "Amount",
-    minWidth: 100,
-  },
-  {
-    id: "due-date",
-    label: "Due Date",
-    minWidth: 100,
-  },
-];
+export default function StickyHeadTable({row}) {
+    // const rows = [
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    //   {
+    //     amount: 100,
+    //     due_date: "2020-01-01",
+    //     status: "DueStatus.pending",
+    //     reason: "Hostel",
+    //     createdAt: "2020-03-09",
+    //   },
+    // ];
 
-export default function StickyHeadTable() {
+    const columns = [
+      {
+        id: "reason",
+        label: "Department",
+        minWidth: 100,
+      },
+      {
+        id: "amount",
+        label: "Amount",
+        minWidth: 100,
+      },
+      {
+        id: "due_date",
+        label: "Due Date",
+        minWidth: 100,
+      },
+    ];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -132,8 +132,8 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <div class="container mx-auto">
-        <div class="w-full overflow-hidden mt-10">
+    <div className="container mx-auto">
+        <div className="w-full overflow-hidden mt-10">
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">

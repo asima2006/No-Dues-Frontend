@@ -13,7 +13,6 @@ const DepDash = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(token);
     try {
       const res = await fetch("http://localhost:8000/department/add-student", {
         method: 'POST',
