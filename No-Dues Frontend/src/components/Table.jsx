@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Paper,
   TableContainer,
@@ -15,78 +15,81 @@ import {
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+import { getDepartmentDue } from '../service/fetchDepartmentDue'
 
-export default function StickyHeadTable({row}) {
+export default function StickyHeadTable({rows}) {
+
+
     // const rows = [
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     //   {
     //     amount: 100,
     //     due_date: "2020-01-01",
     //     status: "DueStatus.pending",
     //     reason: "Hostel",
-    //     createdAt: "2020-03-09",
+    //     created_at: "2020-03-09",
     //   },
     // ];
 

@@ -5,6 +5,20 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 
+/*
+[
+    {
+        "id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
+        "amount": 100,
+        "due_date": "2024-03-15T00:00:00Z",
+        "roll_number": "2101ee36",
+        "status": "paid",
+        "reason": "Hostel fine",
+        "created_at": "2024-03-15T17:35:46.953064Z"
+    },
+]
+
+*/
 const New = () => {
     const context = useRecoilValue(authState);
     const { token , userType } = context;
