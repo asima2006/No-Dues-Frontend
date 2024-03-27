@@ -12,6 +12,8 @@ import GenericModal from '../components/GenericModal';
 import { getDepartmentDue } from '../service/fetchDepartmentDue';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
+import { Button } from '@mui/base';
+import SllideBars from './SllideBar';
 
 const Due = () => {
     const context = useRecoilValue(authState);
@@ -28,14 +30,14 @@ const Due = () => {
         setAnchorEl(null);
     };
 
+    const filters = {};
     useEffect(() => {
         const host = "http://localhost:8000";
-        const filters = {};
-        console.log(token);
+        // console.log(token);
         const fetchDepartmentDue = async () => {
             try {
                 const rows = await getDepartmentDue(host, token, filters);
-                console.log("Data fetched:", rows.data);
+                // console.log("Data fetched:", rows.data);
                 setRows(rows.data);
                 setLoading(false); // Set loading to false after fetching data
             } catch (error) {
@@ -45,12 +47,21 @@ const Due = () => {
 
         fetchDepartmentDue();
 
-    }, []); // Include token in the dependency array
+    }, []); // Include rows in the dependency array
 
     return (
         <div>
             <Header />
-
+            <SllideBars/>
+            {/* <Button
+                variant='contained'
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+            >
+                Role
+            </Button>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -63,15 +74,14 @@ const Due = () => {
                 <MenuItem onClick={handleClose}>B.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>M.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>PHD</MenuItem>
-                <MenuItem>Hello</MenuItem>
-            </Menu>
-            <GenericModal
+            </Menu> */}
+            {/* <GenericModal
                 buttonName="Open Modal"
                 modalTitle="Example Modal"
             >
                 <CreateDueForm />
             </GenericModal>
-            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>}
+            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>} */}
 
         </div>
     );

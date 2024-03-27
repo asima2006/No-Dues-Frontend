@@ -61,7 +61,7 @@ const CreateDueForm = () => {
 
 
     const handleSubmit = async (e) => {
-        console.log(token)
+        // console.log(token)
         e.preventDefault();
 
         try {
@@ -74,10 +74,10 @@ const CreateDueForm = () => {
                 body: JSON.stringify(formData)
             });
             const resp = await response.json();
-            console.log(resp)
+            // console.log(resp)
             if (response.status === 201) {
                 toast.success(resp.message)
-                console.log(resp.message);
+                // console.log(resp.message);
             } else {
                 toast.error(resp.message)
                 console.error('Failed to create due');
