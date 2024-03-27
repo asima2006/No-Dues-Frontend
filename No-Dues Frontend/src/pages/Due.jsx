@@ -49,7 +49,7 @@ const Due = () => {
 
     return (
         <div>
-            <Header />
+            {/* <Header /> */}
 
             <Menu
                 id="basic-menu"

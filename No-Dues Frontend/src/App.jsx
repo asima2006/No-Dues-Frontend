@@ -9,6 +9,7 @@ import Due from './pages/Due';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RecoilRoot } from 'recoil';
+import DepartmentLayout from './pages/_departmentLayout';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
             <Route path='/login-dep' element={<LoginDep />} />
             <Route path='/callback' element={<CallBack />} />
             <Route path='/dep' element={<DepDash />} />
-            <Route path='/dues' element={<Due />} />
+          <Route path='/dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
           </Routes>
         </BrowserRouter>
       <ToastContainer />
