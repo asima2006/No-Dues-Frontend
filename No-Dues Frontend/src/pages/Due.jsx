@@ -13,7 +13,6 @@ import { getDepartmentDue } from '../service/fetchDepartmentDue';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
 import { Button } from '@mui/base';
-import SllideBars from './SllideBar';
 import { backendUri } from '../env';
 
 
@@ -55,16 +54,7 @@ const Due = () => {
     return (
         <div>
             {/* <Header /> */}
-            <SllideBars/>
-            {/* <Button
-                variant='contained'
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                Role
-            </Button>
+            {/* <SllideBars/> */}
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -77,14 +67,25 @@ const Due = () => {
                 <MenuItem onClick={handleClose}>B.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>M.Tech</MenuItem>
                 <MenuItem onClick={handleClose}>PHD</MenuItem>
-            </Menu> */}
-            {/* <GenericModal
-                buttonName="Open Modal"
-                modalTitle="Example Modal"
-            >
-                <CreateDueForm />
-            </GenericModal>
-            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>} */}
+            </Menu>
+            <div className='flex justify-between'>
+                <Button
+                    variant='contained'
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                >
+                    Role
+                </Button>
+                <GenericModal
+                    buttonName="Open Modal"
+                    modalTitle="Example Modal"
+                >
+                    <CreateDueForm />
+                </GenericModal>
+            </div>
+            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>}
 
         </div>
     );

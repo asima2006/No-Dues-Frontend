@@ -51,14 +51,14 @@ const GenericModal = ({ buttonName, children, modalTitle }) => {
                     <div className="mt-2">
                         {children}
                     </div>
-                    {/* <Button
+                    <Button
                         onClick={handleClose}
                         color="primary"
                         variant="contained"
                         style={{ marginTop: '1rem' }}
                     >
                         Close Modal
-                    </Button> */}
+                    </Button>
                 </div>
             </Modal>
         </>
