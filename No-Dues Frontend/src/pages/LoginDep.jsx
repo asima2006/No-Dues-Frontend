@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { authState, userTypeValues} from "../context/auth/authState";
 import { useNavigate } from "react-router-dom";
+import { backendUri } from "../env";
 
 const LoginDep = () => {
   const [formstate, setFormState] = useState({});
@@ -18,9 +19,8 @@ const LoginDep = () => {
   const handleDepPOST = async (e) => {
     e.preventDefault();
     try {
-      const host = "http://localhost:8000";
 
-      const response = await fetch(`${host}/department/login`, {
+      const response = await fetch(`${backendUri}/department/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

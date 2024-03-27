@@ -5,13 +5,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
+import { backendUri } from '../env';
 
 const paddingStyles = {
     mb4: { marginBottom: 4 },
     wFull: { width: '100%' },
 };
 
-const backendUri = 'http://localhost:8000'
+
 
 const CreateDueForm = () => {
 
@@ -61,9 +62,9 @@ const CreateDueForm = () => {
 
 
     const handleSubmit = async (e) => {
-        console.log(token)
         e.preventDefault();
-
+        // Appending 'T00:00:00' to represent the beginning of the day
+        const formattedDueDate = formData.due_date + 'T00:00:00';
         try {
             const response = await fetch(`${backendUri}/due/`, {
                 method: 'POST',
@@ -71,19 +72,19 @@ const CreateDueForm = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({ ...formData, due_date: formattedDueDate })
             });
             const resp = await response.json();
-            console.log(resp)
+            // console.log(resp)
             if (response.status === 201) {
                 toast.success(resp.message)
-                console.log(resp.message);
+                // console.log(resp.message);
             } else {
                 toast.error(resp.message)
                 console.error('Failed to create due');
             }
         } catch (error) {
-
+            toast.error("Something broke, please try again")
             console.error('Error:', error);
         }
     };

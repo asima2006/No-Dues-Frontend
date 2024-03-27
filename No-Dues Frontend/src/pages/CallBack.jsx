@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { backendUri } from '../env';
 
-const 
+const
 CallBack = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ CallBack = () => {
         const code = searchParams.get('code');
 
         if (code) {
-          const response = await fetch('http://localhost:8000/student/login', {
+          const response = await fetch(`${backendUri}/student/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

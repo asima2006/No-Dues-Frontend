@@ -16,8 +16,8 @@ const App = () => {
       <RecoilRoot>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/new' element={<New />} />
+            {/* <Route path='/' element={<Home />} /> */}
+            <Route path='/' element={<New />} />
             <Route path='/stud' element={<StudDash />} />
             <Route path='/login-dep' element={<LoginDep />} />
             <Route path='/callback' element={<CallBack />} />

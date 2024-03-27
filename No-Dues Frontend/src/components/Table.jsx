@@ -18,81 +18,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { getDepartmentDue } from '../service/fetchDepartmentDue'
 
 export default function StickyHeadTable({rows}) {
-
-
-    // const rows = [
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    //   {
-    //     amount: 100,
-    //     due_date: "2020-01-01",
-    //     status: "DueStatus.pending",
-    //     reason: "Hostel",
-    //     created_at: "2020-03-09",
-    //   },
-    // ];
-
     const columns = [
       {
         id: "reason",
@@ -171,8 +96,8 @@ export default function StickyHeadTable({rows}) {
                             );
                             })}
                             <TableCell>
-                                <IconButton>
-                                    <MoreVertIcon onClick={(event) => handleMenuOpen(event, row)}/>
+                                <IconButton onClick={(event) => handleMenuOpen(event, row)}>
+                                    <MoreVertIcon/>
                                 </IconButton>
                             <Menu
                                 anchorEl={anchorEl}
