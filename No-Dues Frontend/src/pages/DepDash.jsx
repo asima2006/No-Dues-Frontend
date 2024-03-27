@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { authState } from '../context/auth/authState';
+import { backendUri } from '../env';
 
 const DepDash = () => {
   const context = useRecoilValue(authState);
@@ -14,7 +15,7 @@ const DepDash = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/department/add-student", {
+      const res = await fetch(`${backendUri}/department/add-student`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",

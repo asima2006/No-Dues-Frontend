@@ -12,6 +12,7 @@ import GenericModal from '../components/GenericModal';
 import { getDepartmentDue } from '../service/fetchDepartmentDue';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
+import { backendUri } from '../env';
 
 const Due = () => {
     const context = useRecoilValue(authState);
@@ -29,12 +30,11 @@ const Due = () => {
     };
 
     useEffect(() => {
-        const host = "http://localhost:8000";
         const filters = {};
         console.log(token);
         const fetchDepartmentDue = async () => {
             try {
-                const rows = await getDepartmentDue(host, token, filters);
+                const rows = await getDepartmentDue(backendUri, token, filters);
                 console.log("Data fetched:", rows.data);
                 setRows(rows.data);
                 setLoading(false); // Set loading to false after fetching data

@@ -3,11 +3,11 @@ import logo from '/logo1.jpg'
 import { authState, userTypeValues } from '../context/auth/authState';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { backendUri } from '../env';
 
 const New = () => {
     const context = useRecoilValue(authState);
     const { token , userType } = context;
-    const backendUri = 'http://localhost:8000'
     const navigator  = useNavigate();
 
     const handleDepGET = async () => {
