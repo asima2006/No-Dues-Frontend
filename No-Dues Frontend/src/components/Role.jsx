@@ -4,16 +4,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { backendUri } from '../env';
 
 const Role = () => {
-  const host = "http://localhost:8000";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const fetchAPI = async (role) => {
-    const res = await fetch(`${host}/`)
+    const res = await fetch(`${backendUri}/`)
   }
   const handleClose = (menuItem) => {
     setAnchorEl(null);

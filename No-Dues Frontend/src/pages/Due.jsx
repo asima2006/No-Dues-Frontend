@@ -14,6 +14,8 @@ import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
 import { Button } from '@mui/base';
 import SllideBars from './SllideBar';
+import { backendUri } from '../env';
+
 
 const Due = () => {
     const context = useRecoilValue(authState);
@@ -32,12 +34,13 @@ const Due = () => {
 
     const filters = {};
     useEffect(() => {
-        const host = "http://localhost:8000";
-        // console.log(token);
+
+        const filters = {};
+        console.log(token);
         const fetchDepartmentDue = async () => {
             try {
-                const rows = await getDepartmentDue(host, token, filters);
-                // console.log("Data fetched:", rows.data);
+                const rows = await getDepartmentDue(backendUri, token, filters);
+                console.log("Data fetched:", rows.data);
                 setRows(rows.data);
                 setLoading(false); // Set loading to false after fetching data
             } catch (error) {
