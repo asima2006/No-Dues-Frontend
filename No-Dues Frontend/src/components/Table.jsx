@@ -96,8 +96,8 @@ export default function StickyHeadTable({rows}) {
                             );
                             })}
                             <TableCell>
-                                <IconButton>
-                                    <MoreVertIcon onClick={(event) => handleMenuOpen(event, row)}/>
+                                <IconButton onClick={(event) => handleMenuOpen(event, row)}>
+                                    <MoreVertIcon/>
                                 </IconButton>
                             <Menu
                                 anchorEl={anchorEl}
