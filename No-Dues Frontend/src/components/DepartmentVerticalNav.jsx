@@ -5,13 +5,22 @@ const useStyles = {
         textDecoration: 'none',
         display: 'block',
         padding: '10px',
-        // textAlign: 'center',
+        backgroundColor: '#ffffff',
+        borderRadius: '10px',
+        color: 'black',
+        fontWeight: '600',
+    },
+    linkButtons: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
     },
     logoutButton: {
-        backgroundColor: '#08F96B',
+        backgroundColor: '#003465',
         borderRadius: '5.20px',
         padding: '10px 20px',
         border: 'none',
+        color: 'white',
     },
     test: {
         display: 'flex',
@@ -81,16 +90,16 @@ const DepartmentNavbar = () => {
     return (
         <div style={useStyles.test}>
             <h2 style={useStyles.logo}>Ezdues</h2>
-            <div className="linkButtons">
+            <div className="linkButtons" style={useStyles.linkButtons}>
                 {pageLinkData.map((data, index) =>
-                    <a key={index} href={data.link} className="linkButton" style={useStyles.linkButton}>
+                    <a key={index} href={data.link} className="linkButton" style={{...useStyles.linkButton, backgroundColor: '#ffffff'}} onMouseOver={(e) => {e.target.style.backgroundColor = '#003465'; e.target.style.color = '#ffffff'}} onMouseOut={(e) => {e.target.style.backgroundColor = '#ffffff'; e.target.style.color = 'black'}}>
                         {data.title}
                     </a>
                 )}
             </div>
             <div className="logoutButtonWrapped" style={useStyles.logoutButtonWrapped}>
                 <button className="logoutButton" style={useStyles.logoutButton} onClick={logout}>
-                    Logout
+                    Sign Out
                 </button>
             </div>
         </div>
