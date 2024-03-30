@@ -1,7 +1,7 @@
 import React from 'react'
 import {FaSearch} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import Role from './Role'
+import Role from '../pages/Filters/Role'
 
 const Header = () => {
     return (

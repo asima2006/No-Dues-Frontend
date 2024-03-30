@@ -6,21 +6,21 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StickyHeadTable from '../components/Table';
 import Header from '../components/Nav';
-import Role from '../components/Role';
 import CreateDueForm from '../components/CreateDueForm';
 import GenericModal from '../components/GenericModal';
 import { getDepartmentDue } from '../service/fetchDepartmentDue';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
 import { Button } from '@mui/base';
-import SllideBars from './SllideBar';
 import { backendUri } from '../env';
+import Filter from './Filters/Filter';
 
 
 const Due = () => {
     const context = useRecoilValue(authState);
     const { token } = context;
     const [rows, setRows] = useState(null);
+    const [param, setParam] = useState([]);
     const [loading, setLoading] = useState(true); // State to track loading
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -32,14 +32,12 @@ const Due = () => {
         setAnchorEl(null);
     };
 
-    const filters = {};
     useEffect(() => {
-
-        const filters = {};
+        console.log(param);
         console.log(token);
         const fetchDepartmentDue = async () => {
             try {
-                const rows = await getDepartmentDue(backendUri, token, filters);
+                const rows = await getDepartmentDue(backendUri, token, param);
                 console.log("Data fetched:", rows.data);
                 setRows(rows.data);
                 setLoading(false); // Set loading to false after fetching data
@@ -53,38 +51,16 @@ const Due = () => {
     }, []); // Include rows in the dependency array
 
     return (
-        <div>
+        <div style={{ height: '100vh', width: '100vw'}}>
             <Header />
-            <SllideBars/>
-            {/* <Button
-                variant='contained'
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                Role
-            </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={handleClose}>B.Tech</MenuItem>
-                <MenuItem onClick={handleClose}>M.Tech</MenuItem>
-                <MenuItem onClick={handleClose}>PHD</MenuItem>
-            </Menu> */}
-            {/* <GenericModal
+            <Filter param = {param} setParam={setParam}/>
+            <GenericModal
                 buttonName="Open Modal"
                 modalTitle="Example Modal"
             >
                 <CreateDueForm />
             </GenericModal>
-            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>} */}
+            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>}
 
         </div>
     );
