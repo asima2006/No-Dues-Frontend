@@ -51,8 +51,7 @@ const Due = () => {
     }, []); // Include rows in the dependency array
 
     return (
-        <div style={{ height: '100vh', width: '100vw'}}>
-            <Header />
+        <div style={{ height: '100vh', width: '78vw'}}>
             <Filter param = {param} setParam={setParam}/>
             <GenericModal
                 buttonName="Open Modal"
@@ -61,7 +60,6 @@ const Due = () => {
                 <CreateDueForm />
             </GenericModal>
             {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>}
-
         </div>
     );
 };
