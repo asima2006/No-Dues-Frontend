@@ -15,6 +15,23 @@ import { Button } from '@mui/base';
 import { backendUri } from '../env';
 import Filter from './Filters/Filter';
 
+const columns = [
+    {
+      id: "reason",
+      label: "Department",
+      minWidth: 100,
+    },
+    {
+      id: "amount",
+      label: "Amount",
+      minWidth: 100,
+    },
+    {
+      id: "due_date",
+      label: "Due Date",
+      minWidth: 100,
+    },
+];
 
 const Due = () => {
     const context = useRecoilValue(authState);
@@ -48,7 +65,7 @@ const Due = () => {
 
         fetchDepartmentDue();
 
-    }, []); // Include rows in the dependency array
+    }, [param]); // Include rows in the dependency array
 
     return (
         <div style={{ height: '100vh', width: '78vw'}}>
@@ -59,7 +76,7 @@ const Due = () => {
             >
                 <CreateDueForm />
             </GenericModal>
-            {rows ? <StickyHeadTable rows={rows} /> : <div>Loading... </div>}
+            {rows ? <StickyHeadTable rows={rows} columns={columns} isDep={true} /> : <div>Loading... </div>}
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 
-const Filter = ({param,setParam}) => {
+const Filter = ({setParam}) => {
   const [selectedRole, setSelectedRole] = useState(null);
 
   const handleRoleSelect = (role) => {
