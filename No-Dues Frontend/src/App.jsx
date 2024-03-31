@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RecoilRoot } from 'recoil';
 import DepartmentLayout from './pages/_departmentLayout';
+import StudDues from './pages/StudDues';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
             {/* <Route path='/' element={<Home />} /> */}
             <Route path='/' element={<New />} />
             <Route path='/stud' element={<StudDash />} />
+            <Route path='/stud-dues' element={<StudDues />} />
             <Route path='/login-dep' element={<LoginDep />} />
             <Route path='/callback' element={<CallBack />} />
             <Route path='/dep' element={<DepDash />} />
