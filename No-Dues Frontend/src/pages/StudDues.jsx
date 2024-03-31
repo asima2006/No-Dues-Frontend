@@ -42,6 +42,7 @@ const StudDues = () => {
   const [param, setParam] = useState([]);
   useEffect(() => {
     console.log(param);
+    // add api to fetch specific students dues
   }, [param])
   return (
     <div>
