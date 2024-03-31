@@ -78,15 +78,15 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                             return (
                               <TableCell key={column.id} align={column.align}>
                                 {row.status === "success" ? (
-                                  <Button variant="contained" style={{ backgroundColor: "green", color: "white" }}>
+                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "green", color: "white" }}>
                                     {row.status}
                                   </Button>
                                 ) : row.status === "pending" ? (
-                                  <Button variant="contained" style={{ backgroundColor: "purple", color: "white" }}>
+                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "purple", color: "white" }}>
                                     {row.status}
                                   </Button>
                                 ) : row.status === "rejected" ? (
-                                  <Button variant="contained" style={{ backgroundColor: "red", color: "white" }}>
+                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "red", color: "white" }}>
                                     {row.status}
                                   </Button>
                                 ) : (
