@@ -62,7 +62,7 @@ const pageLinkData = [
     },
     {
         'title': "Certificates",
-        'link': "/home"
+        'link': "/department-certificates"
     },
     {
         'title': "Manage Students",
@@ -70,12 +70,8 @@ const pageLinkData = [
     },
     {
         'title': "Requests",
-        'link': "/home"
+        'link': "/department-requests"
     },
-    {
-        'title': "Settings",
-        'link': "/home"
-    }
 ];
 
 const DepartmentNavbar = () => {

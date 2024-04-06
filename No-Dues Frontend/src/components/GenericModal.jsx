@@ -55,7 +55,7 @@ const GenericModal = ({ buttonName, children, modalTitle }) => {
                         variant="contained"
                         style={{ marginTop: '1rem' }}
                     >
-                        Close Modal
+                        Close
                     </Button>
                 </div>
             </Modal>

@@ -13,6 +13,8 @@ import DepartmentLayout from './pages/_departmentLayout';
 import StudDues from './pages/StudDues';
 import CommunicationPage from './pages/Communication';
 import NotFoundPage from './pages/NotFound';
+import DepartmentCertificate from './pages/DepartmentCertificate';
+import DepartmentRequest from './pages/DepartmentRequests';
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
             <Route path='/department-dashboard' element={<DepartmentLayout><DepDash /></DepartmentLayout>} />
             <Route path='/department-dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
             <Route path='/department-communication' element={<DepartmentLayout><CommunicationPage/></DepartmentLayout>} />
+            <Route path='/department-certificates' element={<DepartmentLayout><DepartmentCertificate/></DepartmentLayout>} />
+            <Route path='/department-requests' element={<DepartmentLayout><DepartmentRequest /></DepartmentLayout>} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
