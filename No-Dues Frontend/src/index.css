@@ -2,13 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.custom-datepicker::-webkit-calendar-picker-indicator {
-    /* Your custom styles for the calendar icon */
-    color: rgb(15, 15, 15); /* Example color */
-    font-size: 20px;
-    /* z-index: 1000; */
-    position: absolute;
-    cursor: pointer;
-    right: 198px;
-    /* Add any other styles you want to apply */
+body{
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
 }
