@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
+import GenericModal from "../../components/GenericModal";
+import CreateDueForm from "../../components/CreateDueForm";
 
 const Filter = ({setParam}) => {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -213,7 +215,12 @@ const Filter = ({setParam}) => {
             color: 'white'
           }}>
             <button onClick={handleClick}>
-              Create Due Request
+              <GenericModal
+                buttonName="Open Modal"
+                modalTitle="Example Modal"
+              >
+                <CreateDueForm />
+              </GenericModal>
             </button>
           </div>
         </div >

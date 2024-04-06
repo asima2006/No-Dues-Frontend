@@ -50,19 +50,15 @@ const useStyles = {
 const pageLinkData = [
     {
         'title': "Home",
-        'link': "/home"
+        'link': "/department-dashboard"
     },
     {
         'title': "Dues Page",
-        'link': "/dues"
+        'link': "/department-dues"
     },
     {
         'title': "Communication Page",
-        'link': "/home"
-    },
-    {
-        'title': "Communication Page",
-        'link': "/home"
+        'link': "/department-communication"
     },
     {
         'title': "Certificates",

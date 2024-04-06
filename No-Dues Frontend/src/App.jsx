@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RecoilRoot } from 'recoil';
 import DepartmentLayout from './pages/_departmentLayout';
 import StudDues from './pages/StudDues';
+import CommunicationPage from './pages/Communication';
+import NotFoundPage from './pages/NotFound';
 
 const App = () => {
   return (
@@ -23,8 +25,10 @@ const App = () => {
             <Route path='/stud-dues' element={<StudDues />} />
             <Route path='/login-dep' element={<LoginDep />} />
             <Route path='/callback' element={<CallBack />} />
-            <Route path='/dep' element={<DepDash />} />
-          <Route path='/dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
+            <Route path='/department-dashboard' element={<DepartmentLayout><DepDash /></DepartmentLayout>} />
+            <Route path='/department-dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
+            <Route path='/department-communication' element={<DepartmentLayout><CommunicationPage/></DepartmentLayout>} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       <ToastContainer />

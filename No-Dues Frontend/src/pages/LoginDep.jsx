@@ -23,7 +23,7 @@ const LoginDep = () => {
     e.preventDefault();
     try {
       if (token != null || userType == userTypeValues.department) {
-        navigator("/dep");
+        navigator("/department-dues");
       } else {
         const response = await fetch(`${backendUri}/department/login`, {
           method: "POST",
@@ -45,7 +45,7 @@ const LoginDep = () => {
             userType: userTypeValues.department
           });
           toast('Login Successfully')
-          navigator('/dues')
+          navigator('/department-dues')
         } else {
           toast('Login Failed')
         }

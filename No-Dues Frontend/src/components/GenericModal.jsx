@@ -14,13 +14,11 @@ const GenericModal = ({ buttonName, children, modalTitle }) => {
 
     return (
         <>
-            <Button
+            <span
                 onClick={handleOpen}
-                color="primary"
-                variant="contained"
             >
                 {buttonName}
-            </Button>
+            </span>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -36,8 +34,8 @@ const GenericModal = ({ buttonName, children, modalTitle }) => {
                         backgroundColor: 'white',
                         padding: '1rem',
                         borderRadius: '8px',
-                        maxHeight: '90vh', 
-                        overflow: 'auto'   
+                        maxHeight: '90vh',
+                        overflow: 'auto'
                     }}
                 >
                     <Typography

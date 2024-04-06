@@ -70,12 +70,6 @@ const Due = () => {
     return (
         <div style={{ height: '100vh', width: '78vw'}}>
             <Filter param = {param} setParam={setParam}/>
-            <GenericModal
-                buttonName="Open Modal"
-                modalTitle="Example Modal"
-            >
-                <CreateDueForm />
-            </GenericModal>
             {rows ? <StickyHeadTable rows={rows} columns={columns} isDep={true} /> : <div>Loading... </div>}
         </div>
     );
