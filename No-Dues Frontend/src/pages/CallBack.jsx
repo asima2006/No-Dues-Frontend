@@ -6,7 +6,6 @@ const
 CallBack = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   useEffect(() => {
     const handleMicrosoftAuthentication = async () => {
       try {
