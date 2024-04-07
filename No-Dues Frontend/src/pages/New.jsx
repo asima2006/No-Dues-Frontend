@@ -35,8 +35,17 @@ const New = () => {
     }
   };
 
-  const handleStudLogin = () => {
-    console.log("Student login");
+  const handleStudLogin = async () => {
+    const res = await fetch(`${backendUri}/student/login`, {
+      method: 'GET',
+    });
+    const data = await res.json();
+    // console.log(res);
+    if (res.status == 200) {
+      window.location.href = data.login_url;
+    } else {
+      toast('Login failed');
+    }
   }
 
   const toggleView = (view) => {

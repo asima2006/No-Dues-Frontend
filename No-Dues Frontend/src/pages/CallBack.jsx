@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { backendUri } from '../env';
+import { toast } from "react-toastify";
 
 const
 CallBack = () => {
@@ -26,8 +27,8 @@ CallBack = () => {
           console.log(response.statusText);
 
           if (response.status === 200) {
-            // window.location.href = 'http://localhost:5173/';
-            navigate('/')
+            navigate('/stud')
+            toast('Login successful');
           } else {
             console.error('Login failed');
           }
