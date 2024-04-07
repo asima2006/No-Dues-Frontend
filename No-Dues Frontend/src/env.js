@@ -1,1 +1,1 @@
-export const backendUri = 'https://2o811d4o9f.pythonanywhere.com'
+export const backendUri = 'http://localhost:8000'
