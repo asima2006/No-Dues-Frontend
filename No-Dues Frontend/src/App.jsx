@@ -28,7 +28,7 @@ const App = () => {
             {/* <Route path='/login-dep' element={<LoginDep />} /> */}
             <Route path='/callback' element={<CallBack />} />
             <Route path='/dep' element={<DepDash />} />
-          <Route path='/dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
+            <Route path='/dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
             <Route path='/department-dashboard' element={<DepartmentLayout><DepDash /></DepartmentLayout>} />
             <Route path='/department-dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
             <Route path='/department-communication' element={<DepartmentLayout><CommunicationPage/></DepartmentLayout>} />
@@ -38,8 +38,8 @@ const App = () => {
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
-      <ToastContainer />
-    </RecoilRoot>
+        <ToastContainer />
+      </RecoilRoot>
   );
 }
 

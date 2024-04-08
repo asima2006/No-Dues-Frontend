@@ -36,7 +36,7 @@ const Filter = ({setParam}) => {
 
   return (
     <>
-      <div style={{ display: 'flex', width: '79vw', borderBottom: '1px solid grey' }}>
+      <div style={{ display: 'flex', width: '100%', borderBottom: '1px solid grey' }}>
         <div style={{ borderRight: '1px solid grey' }}>
           <div
             style={{

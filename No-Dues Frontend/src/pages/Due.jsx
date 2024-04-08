@@ -14,6 +14,8 @@ import { authState } from '../context/auth/authState';
 import { Button } from '@mui/base';
 import { backendUri } from '../env';
 import Filter from './Filters/Filter';
+import checkDepartmentToken from '../service/checkDepartmentToken';
+import {useNavigate} from 'react-router-dom';
 
 const columns = [
     {
@@ -34,11 +36,17 @@ const columns = [
 ];
 
 const Due = () => {
-    const context = useRecoilValue(authState);
-    const { token } = context;
+    const navigator = useNavigate();
+    const token = checkDepartmentToken()
+
+    if(token === null){
+        navigator('/');
+        return;
+    }
+
     const [rows, setRows] = useState(null);
     const [param, setParam] = useState([]);
-    const [loading, setLoading] = useState(true); // State to track loading
+    const [loading, setLoading] = useState(true);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -57,7 +65,7 @@ const Due = () => {
                 const rows = await getDepartmentDue(backendUri, token, param);
                 console.log("Data fetched:", rows.data);
                 setRows(rows.data);
-                setLoading(false); // Set loading to false after fetching data
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching department due:', error);
             }
@@ -65,10 +73,10 @@ const Due = () => {
 
         fetchDepartmentDue();
 
-    }, [param]); // Include rows in the dependency array
+    }, [param]);
 
     return (
-        <div style={{ height: '100vh', width: '78vw'}}>
+        <div style={{ height: '100vh', width: '100%'}}>
             <Filter param = {param} setParam={setParam}/>
             {rows ? <StickyHeadTable rows={rows} columns={columns} isDep={true} /> : <div>Loading... </div>}
         </div>
