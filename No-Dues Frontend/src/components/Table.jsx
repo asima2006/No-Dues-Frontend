@@ -13,7 +13,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import GenericModal from "./GenericModal";
 import CreateDueForm from "./CreateDueForm";
 
@@ -22,6 +22,7 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [view, setView] = useState('initiate');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -42,8 +43,12 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
     setSelectedRow(null);
   };
 
+  const toggleButton = () => {
+    
+  }
+
   return (
-    <div className="container mx-auto">
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       <div className="w-full overflow-hidden mt-10">
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
@@ -69,31 +74,56 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                   .map((row, rowIndex) => {
                     return (
                       <TableRow hover tabIndex={-1} key={rowIndex}>
-                        <TableCell>
-                          {rowIndex + 1}
-                        </TableCell>
+                        <TableCell>{rowIndex + 1}</TableCell>
                         {columns.map((column) => {
                           const value = row[column.id];
-                          if (column.id == 'status' && isDep == false) {
+                          if (column.id == "status" && isDep == false) {
                             return (
                               <TableCell key={column.id} align={column.align}>
                                 {row.status === "success" ? (
-                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "green", color: "white" }}>
+                                  <Button
+                                    disabled={true}
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "green",
+                                      color: "white",
+                                    }}
+                                  >
                                     {row.status}
                                   </Button>
                                 ) : row.status === "pending" ? (
-                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "purple", color: "white" }}>
+                                  <Button
+                                    disabled={true}
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "purple",
+                                      color: "white",
+                                    }}
+                                  >
                                     {row.status}
                                   </Button>
                                 ) : row.status === "rejected" ? (
-                                  <Button disabled={true} variant="contained" style={{ backgroundColor: "red", color: "white" }}>
+                                  <Button
+                                    disabled={true}
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "red",
+                                      color: "white",
+                                    }}
+                                  >
                                     {row.status}
                                   </Button>
                                 ) : (
                                   row.status
                                 )}
                               </TableCell>
-                            )
+                            );
+                          } else if (column.id == "initiate_due_certificate") {
+                            <TableCell key={column.id} align={column.align}>
+                              <Button onClick={toggleButton}>
+
+                              </Button>
+                            </TableCell>
                           } else {
                             return (
                               <TableCell key={column.id} align={column.align}>
@@ -105,30 +135,48 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                           }
                         })}
                         <TableCell>
-                          {isDep && <IconButton onClick={(event) => handleMenuOpen(event, row)}>
-                            <MoreVertIcon />
-                          </IconButton>}
-                          {isDep ? <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl && selectedRow === row)}
-                            onClose={handleMenuClose}
-                          >
-                            {Object.keys(row).map((key) => {
-                              if (!columns.some((column) => column.id === key)) {
-                                return (
-                                  <MenuItem key={key} onClick={handleMenuClose}>
-                                    <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {row[key]}
-                                  </MenuItem>
-                                );
-                              }
-                              return null;
-                            })}
-                          </Menu> : <GenericModal
-                            buttonName="Open Modal"
-                            modalTitle="Example Modal"
-                          >
-                            <CreateDueForm />
-                          </GenericModal>}
+                          {isDep && (
+                            <IconButton
+                              onClick={(event) => handleMenuOpen(event, row)}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                          )}
+                          {isDep ? (
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl && selectedRow === row)}
+                              onClose={handleMenuClose}
+                            >
+                              {Object.keys(row).map((key) => {
+                                if (
+                                  !columns.some((column) => column.id === key)
+                                ) {
+                                  return (
+                                    <MenuItem
+                                      key={key}
+                                      onClick={handleMenuClose}
+                                    >
+                                      <strong>
+                                        {key.charAt(0).toUpperCase() +
+                                          key.slice(1)}
+                                        :
+                                      </strong>{" "}
+                                      {row[key]}
+                                    </MenuItem>
+                                  );
+                                }
+                                return null;
+                              })}
+                            </Menu>
+                          ) : (
+                            <GenericModal
+                              buttonName="Open Modal"
+                              modalTitle="Example Modal"
+                            >
+                              <CreateDueForm />
+                            </GenericModal>
+                          )}
                         </TableCell>
                       </TableRow>
                     );

@@ -17,25 +17,22 @@ import DepartmentRequest from './pages/DepartmentRequests';
 
 const App = () => {
   return (
-      <RecoilRoot>
-        <BrowserRouter>
-          <Routes>
-            {/* <Route path='/' element={<Home />} /> */}
-            <Route path='/' element={<New />} />
-            <Route path='/stud' element={<StudDash />} />
-            <Route path='/stud-dues' element={<StudDues />} />
-            {/* <Route path='/login-dep' element={<LoginDep />} /> */}
-            <Route path='/callback' element={<CallBack />} />
-            <Route path='/dep' element={<DepDash />} />
-          <Route path='/dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
-            <Route path='/department-dashboard' element={<DepartmentLayout><DepDash /></DepartmentLayout>} />
-            <Route path='/department-dues' element={<DepartmentLayout><Due /></DepartmentLayout>} />
-            <Route path='/department-communication' element={<DepartmentLayout><CommunicationPage/></DepartmentLayout>} />
-            <Route path='/department-certificates' element={<DepartmentLayout><DepartmentCertificate/></DepartmentLayout>} />
-            <Route path='/department-requests' element={<DepartmentLayout><DepartmentRequest /></DepartmentLayout>} />
-            <Route path='*' element={<NotFoundPage />} />
-          </Routes>
-        </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path='/' element={<Home />} /> */}
+          <Route path='/' element={<New />} />
+          <Route path='/stud' element={<StudDash />} />
+          <Route path='/stud-dues' element={<StudDues />} />
+          <Route path='/callback' element={<CallBack />} />
+          <Route path='//department-dues' element={<Due />} />
+          <Route path='/department-dashboard' element={<DepDash />} />
+          <Route path='/department-communication' element={<CommunicationPage />} />
+          <Route path='/department-certificates' element={<DepartmentCertificate />} />
+          <Route path='/department-requests' element={<DepartmentRequest />} />
+          <Route path='*' element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
       <ToastContainer />
     </RecoilRoot>
   );

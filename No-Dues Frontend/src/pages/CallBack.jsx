@@ -39,7 +39,7 @@ CallBack = () => {
     };
 
     handleMicrosoftAuthentication();
-  }, [location.search]);
+  }, []);
 
   return (
     <div>

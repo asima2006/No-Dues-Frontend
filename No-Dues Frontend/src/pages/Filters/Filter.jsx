@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import GenericModal from "../../components/GenericModal";
@@ -30,13 +30,16 @@ const Filter = ({setParam}) => {
   };
 
   const handleClick = () => {
-    setParam(filter);
     console.log(filter);
   }
+  
+  useEffect(()=>{
+    setParam(filter);
+  },[filter])
 
   return (
     <>
-      <div style={{ display: 'flex', width: '79vw', borderBottom: '1px solid grey' }}>
+      <div style={{ display: 'flex', width: '100%', borderBottom: '1px solid grey' }}>
         <div style={{ borderRight: '1px solid grey' }}>
           <div
             style={{
@@ -202,7 +205,7 @@ const Filter = ({setParam}) => {
         <div style={{
           display: 'flex',
           width: '15%',
-          justifyCcontent: 'center',
+          justifyContent: 'center',
           alignItems: 'center'
         }}>
           <div style={{

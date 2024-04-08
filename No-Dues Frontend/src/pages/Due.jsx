@@ -50,8 +50,8 @@ const Due = () => {
     };
 
     useEffect(() => {
-        console.log(param);
-        console.log(token);
+        // console.log("Param: "+ param);
+        // console.log(token);
         const fetchDepartmentDue = async () => {
             try {
                 const rows = await getDepartmentDue(backendUri, token, param);
@@ -68,10 +68,13 @@ const Due = () => {
     }, [param]); // Include rows in the dependency array
 
     return (
-        <div style={{ height: '100vh', width: '78vw'}}>
+        <>
+        <Header label="DUE RECORD" isDep={true}/>
+        <div style={{ display: 'flex', flexDirection: 'column', overflow: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
             <Filter param = {param} setParam={setParam}/>
             {rows ? <StickyHeadTable rows={rows} columns={columns} isDep={true} /> : <div>Loading... </div>}
         </div>
+        </>
     );
 };
 

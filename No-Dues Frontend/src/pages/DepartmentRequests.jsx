@@ -17,6 +17,7 @@ import {
     Link
 } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Header from "../components/Nav";
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
@@ -295,9 +296,12 @@ const rows = [
 export default function DepartmentRequest(){
     const [param, setParam] = useState([]);
     return(
+        <>
+        <Header isDep={true} label={"REQUESTS"}/>
         <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
             <Filter param={param} setParam={setParam} />
             {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
         </div>
+        </>
     )
 }

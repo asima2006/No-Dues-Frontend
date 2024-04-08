@@ -1,9 +1,9 @@
 export const getDepartmentDue = async (host, token, filters) => {
     console.log(filters);
     const queryParams = new URLSearchParams(filters);
-    console.log(queryParams);
+    // console.log(queryParams);
     const url = `${host}/department/dues?${queryParams}`;
-    console.log(url);
+    // console.log(url);
 
     try {
         const response = await fetch(url, {
