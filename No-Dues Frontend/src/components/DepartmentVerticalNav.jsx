@@ -25,12 +25,14 @@ const useStyles = {
     test: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: '90vh',
         width: '250px',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderRight: '1px solid black', // Only right border
-        position: 'relative',
+        position: 'absolute',
+        zIndex: '100000',
+        background: 'white'
     },
     logo: {
         padding:'10px',
