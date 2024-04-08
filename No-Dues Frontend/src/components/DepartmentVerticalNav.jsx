@@ -66,7 +66,7 @@ const pageLinkData = [
     },
     {
         'title': "Manage Students",
-        'link': "/home"
+        'link': "/department-manage-student"
     },
     {
         'title': "Requests",

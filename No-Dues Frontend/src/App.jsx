@@ -14,6 +14,7 @@ import CommunicationPage from './pages/Communication';
 import NotFoundPage from './pages/NotFound';
 import DepartmentCertificate from './pages/DepartmentCertificate';
 import DepartmentRequest from './pages/DepartmentRequests';
+import DepartmentManageStudent from './pages/DepartmentManageStudent';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path='/department-communication' element={<DepartmentLayout><CommunicationPage/></DepartmentLayout>} />
             <Route path='/department-certificates' element={<DepartmentLayout><DepartmentCertificate/></DepartmentLayout>} />
             <Route path='/department-requests' element={<DepartmentLayout><DepartmentRequest /></DepartmentLayout>} />
+            <Route path='/department-manage-student' element={<DepartmentLayout><DepartmentManageStudent /></DepartmentLayout>} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
