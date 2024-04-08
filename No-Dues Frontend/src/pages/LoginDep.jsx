@@ -44,6 +44,8 @@ const LoginDep = () => {
             token: token,
             userType: userTypeValues.department
           });
+          localStorage.setItem('token', token);
+          localStorage.setItem('userType', userTypeValues.department);
           toast('Login Successfully')
           navigator('/department-dues')
         } else {
