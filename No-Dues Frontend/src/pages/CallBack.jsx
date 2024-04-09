@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { backendUri } from '../env';
 import { toast } from "react-toastify";
+import { useSetRecoilState } from 'recoil';
+import { authState, userTypeValues } from '../context/auth/authState';
 
-const
-CallBack = () => {
+const CallBack = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const setAuth = useSetRecoilState(authState);
   useEffect(() => {
     const handleMicrosoftAuthentication = async () => {
       try {
@@ -24,9 +26,16 @@ CallBack = () => {
             }),
           });
 
-          console.log(response.statusText);
+          if (response.ok) {
+            const { token } = await response.json();
+            setAuth({
+              isAuthenticated: true,
+              token: token,
+              userType: userTypeValues.student
+            });
+            localStorage.setItem('token', token);
+            localStorage.setItem('userType', userTypeValues.student);
 
-          if (response.status === 200) {
             navigate('/stud')
             toast('Login successful');
           } else {
@@ -39,7 +48,7 @@ CallBack = () => {
     };
 
     handleMicrosoftAuthentication();
-  }, []);
+  }, [location.search]);
 
   return (
     <div>
