@@ -91,7 +91,7 @@ export default function DepartmentCertificate() {
 
 	return (
 		<>
-		<Header label={"CERTIFICATE PAGE"} isDep={false}/>
+		<Header label={"CERTIFICATE PAGE"} isDep={true}/>
 			<div className="p-2 h-screen overflow-y-auto flex">
 				<div className="flex w-5/6">
 					<div className='border-2 w-full'>
