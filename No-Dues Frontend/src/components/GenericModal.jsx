@@ -15,6 +15,7 @@ const GenericModal = ({ buttonName, children, modalTitle }) => {
     return (
         <>
             <span
+                style={{cursor: 'pointer'}}
                 onClick={handleOpen}
             >
                 {buttonName}

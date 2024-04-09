@@ -16,13 +16,13 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import GenericModal from "./GenericModal";
 import CreateDueForm from "./CreateDueForm";
+import EastIcon from '@mui/icons-material/East';
 
-export default function StickyHeadTable({ rows, columns, isDep }) {
+export default function StickyHeadTable({ rows, columns, isDep, isDash}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [view, setView] = useState('initiate');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -43,14 +43,10 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
     setSelectedRow(null);
   };
 
-  const toggleButton = () => {
-    
-  }
-
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+    <div style={{ margin: 'auto', width: '80vw' }}>
       <div className="w-full overflow-hidden mt-10">
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <Paper sx={{ width: "100%" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -65,7 +61,7 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell>Details</TableCell>
+                  {isDash ? null : <TableCell>Details</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -118,12 +114,14 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                                 )}
                               </TableCell>
                             );
-                          } else if (column.id == "initiate_due_certificate") {
-                            <TableCell key={column.id} align={column.align}>
-                              <Button onClick={toggleButton}>
-
-                              </Button>
-                            </TableCell>
+                          } else if (column.id == "allow_certificate_generation") {
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                <Button>
+                                  {row.allow_certificate_generation == true ? (<Button variant="contained">ALLOWED</Button>) : (<Button variant="contained">NOT ALLOWED</Button>)}
+                                </Button>
+                              </TableCell>
+                            )
                           } else {
                             return (
                               <TableCell key={column.id} align={column.align}>
@@ -149,27 +147,32 @@ export default function StickyHeadTable({ rows, columns, isDep }) {
                               onClose={handleMenuClose}
                             >
                               {Object.keys(row).map((key) => {
-                                if (
-                                  !columns.some((column) => column.id === key)
-                                ) {
+                                if (!columns.some((column) => column.id === key && key !== "id")) {
+                                  let label, value;
+                                  if (key === "created_at") {
+                                    label = "Created at";
+                                    value = new Date(row[key]).toLocaleString();
+                                  } else if (key === "roll_number") {
+                                    label = "Roll Number";
+                                    value = row[key].toUpperCase();
+                                  } else {
+                                    label = key.charAt(0).toUpperCase() + key.slice(1);
+                                    value = row[key];
+                                  }
                                   return (
-                                    <MenuItem
-                                      key={key}
-                                      onClick={handleMenuClose}
-                                    >
-                                      <strong>
-                                        {key.charAt(0).toUpperCase() +
-                                          key.slice(1)}
-                                        :
-                                      </strong>{" "}
-                                      {row[key]}
-                                    </MenuItem>
+                                    <MenuItem key={key} onClick={handleMenuClose}>
+                                    <strong>
+                                      {label}
+                                      :
+                                    </strong>{" "}
+                                    {value}
+                                  </MenuItem>
                                   );
                                 }
                                 return null;
                               })}
                             </Menu>
-                          ) : (
+                          ) : isDash ? (<Button variant="contained" id='link' href="/stud-dues"><EastIcon/></Button>) : (
                             <GenericModal
                               buttonName="Open Modal"
                               modalTitle="Example Modal"
