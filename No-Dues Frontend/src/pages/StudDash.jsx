@@ -4,6 +4,8 @@ import logo from "/logo1.jpg";
 import SettingsIcon from '@mui/icons-material/Settings';
 import {Button} from '@mui/material';
 import StickyHeadTable from "../components/Table";
+import checkDepartmentToken from "../service/checkDepartmentToken";
+import { backendUri } from "../env";
 
 const rows = [
   {
@@ -45,6 +47,20 @@ const StudDash = () => {
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
+  useEffect(()=>{
+    const token = checkDepartmentToken();
+    const fetchRecords = async () => {
+      const res = await fetch(`${backendUri}/student/all-department-data-min`,{
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        }
+      });
+    }
+
+    fetchRecords();
+  },[]);
 
   return (
     <div style={{ border: "1px solid white", height: "100vh", width: "100vw" }}>
@@ -145,7 +161,6 @@ const StudDash = () => {
         </Button>
       </div>
       <StickyHeadTable rows={rows} columns={columns} isDep={false}/>
-
     </div>
   );
 };
