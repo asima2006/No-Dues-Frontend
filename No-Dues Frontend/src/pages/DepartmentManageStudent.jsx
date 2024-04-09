@@ -13,11 +13,31 @@ import {
     TablePagination,
     Button,
     Typography,
-    Divider,
-    Link
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Header from "../components/Nav";
+import checkDepartmentToken from "../service/checkDepartmentToken";
+import { useNavigate } from "react-router-dom";
+import { backendUri } from "../env";
+import Header from '../components/Nav';
+import {toast} from "react-toastify"
+
+const columns = [
+    {
+        id: "first_name",
+        label: "First Name",
+        minWidth: 100,
+    },
+    {
+        id: "roll_number",
+        label: "Roll Number",
+        minWidth: 100,
+    },
+    {
+        id: "role",
+        label: "Role",
+        minWidth: 100,
+    },
+];
+
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
@@ -107,12 +127,17 @@ function StudentDetailModal({ row }) {
     );
 }
 
-function StickyHeadTable({ rows, columns }) {
+function StickyHeadTable({ rows, columns, navigator }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
 
+    const token = checkDepartmentToken();
+    if(token === null){
+        navigator('/');
+        return;
+    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -132,6 +157,29 @@ function StickyHeadTable({ rows, columns }) {
         setSelectedRow(null);
     };
 
+    const handleToogleButton = async (roll_number) => {
+        try {
+            const response = await fetch(`${backendUri}/department/switch-certificate-generation-permission`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+                body:JSON.stringify({
+                    "roll_number":roll_number
+                })
+            });
+
+            const data = await response.json();
+            if(response.status === 200){
+                toast.success(data.message)
+            }
+            else{
+                toast.error("Error occured",data.message);
+            }
+        } catch (error) {
+            toast.error('Failed to switch permission');
+        }
+    }
     return (
         <div className="container mx-auto">
             <div className="w-full overflow-hidden mt-10">
@@ -181,6 +229,7 @@ function StickyHeadTable({ rows, columns }) {
                                                             backgroundColor: row.allow_certificate_generation ? '#F44336' : '#4CAF50',
                                                             color: 'white'
                                                         }}
+                                                        onClick={() => handleToogleButton(row['roll_number'])}
                                                     >
                                                         {row.allow_certificate_generation ? 'Disable' : 'Enable'}
                                                     </Button>
@@ -207,63 +256,41 @@ function StickyHeadTable({ rows, columns }) {
 }
 
 
-
-const columns = [
-    {
-        id: "first_name",
-        label: "First Name",
-        minWidth: 100,
-    },
-    {
-        id: "roll_number",
-        label: "Roll Number",
-        minWidth: 100,
-    },
-    {
-        id: "role",
-        label: "Role",
-        minWidth: 100,
-    },
-];
-
-const rows = [
-        {
-            "roll_number": "2101ee36",
-            "first_name": "Heet",
-            "last_name": "Dhorajiya",
-            "email": "heet_2101ee36@iitp.ac.in",
-            "academic_program": "Electrical and Electronincs Engineering",
-            "role": "B.Tech",
-            "allow_certificate_generation": true
-        },
-        {
-            "roll_number": "2101ee37",
-            "first_name": "Honey",
-            "last_name": "Khatri",
-            "email": "honey_2101ee37@iitp.ac.in",
-            "academic_program": "Electrical and Electronincs Engineering",
-            "role": "B.Tech",
-            "allow_certificate_generation": false
-        },
-        {
-            "roll_number": "2101ee34",
-            "first_name": "Harman",
-            "last_name": "Saluja",
-            "email": "harman_2101ee34@iitp.ac.in",
-            "academic_program": "Electrical and Electronincs Engineering",
-            "role": "B.Tech",
-            "allow_certificate_generation": false
-        }
-]
-
 export default function DepartmentManageStudent() {
     const [param, setParam] = useState([]);
+    const [rows, setRows] = useState([]);
+    const navigator = useNavigate();
+    const token = checkDepartmentToken();
+
+    if (token === null){
+        navigator('/');
+        return;
+    }
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                const response = await fetch(`${backendUri}/department/get-department-students`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                const data = await response.json();
+                setRows(data.data);
+            } catch (error) {
+                toast.error('Failed to fetch certificate template. Please refresh the page.');
+            }
+        }
+        fetchStudents()
+    }, [])
+
     return (
         <>
         <Header label={"MANAGE STUDENTS"} isDep={true} />
         <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
             <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
+            {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator}/> : <div>Loading... </div>}
         </div>
         </>
     )
