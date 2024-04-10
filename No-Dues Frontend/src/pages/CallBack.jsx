@@ -4,6 +4,7 @@ import { backendUri } from '../env';
 import { toast } from "react-toastify";
 import { useSetRecoilState } from 'recoil';
 import { authState, userTypeValues } from '../context/auth/authState';
+import Loader from '../components/Loader';
 
 const CallBack = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const CallBack = () => {
 
   return (
     <div>
-      <p>Processing authentication...</p>
+      <Loader/>
     </div>
   );
 };
