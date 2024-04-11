@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { backendUri } from "../env";
 import Header from '../components/Nav';
 import {toast} from "react-toastify"
+import removeNullParams from "../service/removeNullParams";
 
 const columns = [
     {
@@ -38,19 +39,8 @@ const columns = [
     },
 ];
 
-function removeNullParams(paramsObject) {
-    const newObj = {};
 
-    for (const [key, value] of Object.entries(paramsObject)) {
-        if (value !== null && value !== undefined) {
-            newObj[key] = value;
-        }
-    }
-
-    return newObj;
-}
-
-const Filter = ({ setParam }) => {
+const Filter = ({ setParam , setClicked}) => {
     const [filter, setFilter] = useState({
         role: null,
         academic_program: null,
@@ -67,6 +57,7 @@ const Filter = ({ setParam }) => {
 
     const handleClick = () => {
         setParam(filter);
+        setClicked((prev) => prev + 1);
         console.log(filter);
     };
 
@@ -309,7 +300,7 @@ export default function DepartmentManageStudent() {
         <>
         <Header label={"MANAGE STUDENTS"} isDep={true} />
         <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
-            <Filter param={param} setParam={setParam} />
+            <Filter param={param} setParam={setParam} setClicked={setClicked} />
             {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked}/> : <div>Loading... </div>}
         </div>
         </>
