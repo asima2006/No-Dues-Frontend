@@ -38,12 +38,23 @@ const columns = [
     },
 ];
 
+function removeNullParams(paramsObject) {
+    const newObj = {};
+
+    for (const [key, value] of Object.entries(paramsObject)) {
+        if (value !== null && value !== undefined) {
+            newObj[key] = value;
+        }
+    }
+
+    return newObj;
+}
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
-        role: "",
-        academic_program: "",
-        joining_year: "",
+        role: null,
+        academic_program: null,
+        joining_year: null,
     });
 
     const handleChange = (e) => {
@@ -127,7 +138,7 @@ function StudentDetailModal({ row }) {
     );
 }
 
-function StickyHeadTable({ rows, columns, navigator }) {
+function StickyHeadTable({ rows, columns, navigator, setClicked }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -163,6 +174,7 @@ function StickyHeadTable({ rows, columns, navigator }) {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
                 },
                 body:JSON.stringify({
                     "roll_number":roll_number
@@ -172,6 +184,7 @@ function StickyHeadTable({ rows, columns, navigator }) {
             const data = await response.json();
             if(response.status === 200){
                 toast.success(data.message)
+                setClicked((prev) => prev + 1);
             }
             else{
                 toast.error("Error occured",data.message);
@@ -257,6 +270,7 @@ function StickyHeadTable({ rows, columns, navigator }) {
 
 
 export default function DepartmentManageStudent() {
+    const [clicked, setClicked] = useState(0);
     const [param, setParam] = useState([]);
     const [rows, setRows] = useState([]);
     const navigator = useNavigate();
@@ -269,28 +283,34 @@ export default function DepartmentManageStudent() {
 
     useEffect(() => {
         const fetchStudents = async () => {
+            const queryParams = new URLSearchParams(removeNullParams(param));
             try {
-                const response = await fetch(`${backendUri}/department/get-department-students`, {
+                const response = await fetch(`${backendUri}/department/get-department-students?${queryParams.toString()}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token
                     }
                 });
+
+                if(response.status !== 200){
+                    toast.error('Failed to fetch students. Please refresh the page.');
+                    return;
+                }
                 const data = await response.json();
                 setRows(data.data);
             } catch (error) {
-                toast.error('Failed to fetch certificate template. Please refresh the page.');
+                toast.error('Failed to fetch student. Please refresh the page.');
             }
         }
         fetchStudents()
-    }, [])
+    }, [clicked,param])
 
     return (
         <>
         <Header label={"MANAGE STUDENTS"} isDep={true} />
         <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
             <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator}/> : <div>Loading... </div>}
+            {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked}/> : <div>Loading... </div>}
         </div>
         </>
     )
