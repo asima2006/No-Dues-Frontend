@@ -59,10 +59,6 @@ const pageLinkData = [
         'link': "/department-dues"
     },
     {
-        'title': "Communication Page",
-        'link': "/department-communication"
-    },
-    {
         'title': "Certificates",
         'link': "/department-certificates"
     },
