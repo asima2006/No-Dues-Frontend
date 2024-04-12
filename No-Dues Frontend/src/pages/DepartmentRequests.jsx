@@ -142,7 +142,7 @@ function RequestDetailModal({ row }) {
 }
 
 function DueDetailModal({ id }) {
-    const [data , setData] = useState(null)
+    const [data, setData] = useState(null)
     const token = checkDepartmentToken();
 
     useEffect(() => {
@@ -168,20 +168,7 @@ function DueDetailModal({ id }) {
         }
         fetchRequests()
     }, [])
-    /*
-    {
-    "id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-    "amount": 100,
-    "department": "Electrical",
-    "due_date": "15-03-2024 00:00:00",
-    "proof": [],
-    "reason": "Hostel fine",
-    "created_at": "15-03-2024 17:35:46",
-    "payment_url": null,
-    "status": "paid",
-    "student_roll_number": "2101ee36",
-    "student_name": "Heet Dhorajiya"
-}*/
+
     return (
         <>
             {data ? (
@@ -191,7 +178,6 @@ function DueDetailModal({ id }) {
                     <Typography variant="body1" className="mb-1"><strong>Due Reason:</strong> {data.reason}</Typography>
                     <Typography variant="body1" className="mb-1"><strong>Due Date:</strong> {data.due_date}</Typography>
                     <Typography variant="body1" className="mb-1"><strong>Student Name:</strong> {data.student_name}</Typography>
-                    {/* Add more fields based on your data model */}
                     <Typography variant="body1" className="mb-1"><strong>Status:</strong> {data.status}</Typography>
                     <Typography variant="body1" className="mb-1"><strong>Created At:</strong> {data.created_at}</Typography>
                     {data.payment_url && (
@@ -209,19 +195,17 @@ function DueDetailModal({ id }) {
 }
 
 
-function StickyHeadTable({ rows, columns}) {
+function StickyHeadTable({ rows, columns, setClicked }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedRow, setSelectedRow] = useState(null);
 
     const handleRequestButton = async (action, id) => {
         const token = checkDepartmentToken();
-        const actionResp = action ? 'accept' :'reject';
+        const actionResp = action ? 'accept' : 'reject';
         const response = await fetch(`${backendUri}/due/process-response`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer'+ token,
+                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -233,14 +217,13 @@ function StickyHeadTable({ rows, columns}) {
         if (response.status !== 200) {
             toast.error('Failed to perform the action, please try again later.');
             return;
-        }
-        else{
+        } else {
             const data = await response.json();
             toast.success(data.message);
+            setClicked(prev => prev + 1)
         }
+    };
 
-
-    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -250,18 +233,8 @@ function StickyHeadTable({ rows, columns}) {
         setPage(0);
     };
 
-    const handleMenuOpen = (event, row) => {
-        setSelectedRow(row);
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        setSelectedRow(null);
-    };
-
     return (
-        <div className="container mx-auto">
+        <div style={{ margin: 'auto', width: '80vw' }}>
             <div className="w-full overflow-hidden mt-10">
                 <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
@@ -284,53 +257,48 @@ function StickyHeadTable({ rows, columns}) {
                             <TableBody>
                                 {rows
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row, rowIndex) => {
-                                        return (
-                                            <TableRow hover tabIndex={-1} key={rowIndex}>
-                                                <TableCell>
-                                                    {rowIndex + 1}
-                                                </TableCell>
-                                                {columns.map((column) => {
-                                                        return (
-                                                            <TableCell key={column.id} align={column.align}>
-                                                                <Button>
-                                                                    <GenericModal buttonName={row[column.id]}>
-                                                                        <DueDetailModal id={row.due_id} />
-                                                                    </GenericModal>
-                                                                </Button>
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                )}
-                                                <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <Button
-                                                        style={{ backgroundColor: '#4CAF50', color: 'white' }}
-                                                        onClick={() => handleRequestButton(true, row.id)}
-                                                    >
-                                                        Accept
-                                                    </Button>
-                                                    <Button
-                                                        style={{ textTransform: 'none' }}
-                                                        onClick={() => handleRequestButton(false, row.id)}
-                                                    >
-                                                        <GenericModal buttonName="Details">
-                                                            <RequestDetailModal row={row}/>
+                                    .map((row, rowIndex) => (
+                                        <TableRow hover tabIndex={-1} key={rowIndex}>
+                                            <TableCell>
+                                                {rowIndex + 1}
+                                            </TableCell>
+                                            {columns.map((column) => (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    <Button>
+                                                        <GenericModal buttonName={row[column.id]}>
+                                                            <DueDetailModal id={row.due_id} />
                                                         </GenericModal>
                                                     </Button>
-                                                    <Button style={{ backgroundColor: '#F44336', color: 'white' }}>
-                                                        Reject
-                                                    </Button>
                                                 </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
+                                            ))}
+                                            <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                <Button
+                                                    style={{ backgroundColor: '#4CAF50', color: 'white' }}
+                                                    onClick={() => handleRequestButton(true, row.id)}
+                                                >
+                                                    Accept
+                                                </Button>
+                                                <Button
+                                                    style={{ textTransform: 'none' }}
+                                                    onClick={() => handleRequestButton(false, row.id)}
+                                                >
+                                                    <GenericModal buttonName="Details">
+                                                        <RequestDetailModal row={row} />
+                                                    </GenericModal>
+                                                </Button>
+                                                <Button style={{ backgroundColor: '#F44336', color: 'white' }}>
+                                                    Reject
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[1,2, 5, 10]}
+                        rowsPerPageOptions={[1, 2, 5, 10]}
                         component="div"
-                        count={Math.floor(rows.length/rowsPerPage) + (rows.length%rowsPerPage > 0 ? 1 : 0)}
+                        count={Math.floor(rows.length / rowsPerPage) + (rows.length % rowsPerPage > 0 ? 1 : 0)}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -341,7 +309,6 @@ function StickyHeadTable({ rows, columns}) {
         </div>
     );
 }
-
 
 
 const columns = [
@@ -370,7 +337,7 @@ const columns = [
 
 const url = '{{localhost}}'
 
-export default function DepartmentRequest(){
+export default function DepartmentRequest() {
     const [clicked, setClicked] = useState(0);
     const [param, setParam] = useState([]);
     const [rows, setRows] = useState([]);
@@ -404,13 +371,14 @@ export default function DepartmentRequest(){
         }
         fetchRequests()
     }, [clicked, param])
-    return(
+
+    return (
         <>
-        <Header isDep={true} label={"REQUESTS"}/>
-        <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
-            <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns}/> : <div>Loading... </div>}
-        </div>
+            <Header isDep={true} label={"REQUESTS"} />
+            <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
+                <Filter setParam={setParam} />
+                {rows ? <StickyHeadTable rows={rows} columns={columns} setClicked={setClicked}/> : <div>Loading... </div>}
+            </div>
         </>
     )
 }

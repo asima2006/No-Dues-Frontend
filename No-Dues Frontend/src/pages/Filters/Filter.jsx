@@ -1,234 +1,95 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { FaSearch } from "react-icons/fa";
-import GenericModal from "../../components/GenericModal";
-import CreateDueForm from "../../components/CreateDueForm";
+import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import GenericModal from '../../components/GenericModal';
+import CreateDueForm from '../../components/CreateDueForm';
 
-const Filter = ({setParam}) => {
-  const [selectedRole, setSelectedRole] = useState(null);
-
-  const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-  };
-
+const Filter = ({ setParam, setClick }) => {
   const [filter, setFilter] = useState({
-    dep_name: "",
-    due_amount: "",
     role: '',
-    academic_program: "",
-    is_Active: 0,
-    start_date: "",
-    end_date: "",
+    academic_program: '',
+    start_date: '',
+    end_date: ''
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFilter((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
+      [name]: type === 'checkbox' ? (checked ? 1 : 0) : value
     }));
   };
 
   const handleClick = () => {
-    console.log(filter);
-  }
-  
-  useEffect(()=>{
     setParam(filter);
-  },[filter])
+    console.log(filter);
+  };
 
   return (
-    <>
-      <div style={{ display: 'flex', width: '100%', borderBottom: '1px solid grey' }}>
-        <div style={{ borderRight: '1px solid grey' }}>
-          <div
-            style={{
-              display: "flex",
-              fontSize: "x-large",
-              margin: "4px",
-              marginLeft: "16px",
-            }}
+    <div className="w-full">
+      <div className="text-xl font-bold mx-4 my-2">Filters</div>
+      <div className="flex flex-wrap gap-8 py-2 px-24 items-center justify-between">
+        <div className="flex items-center justify-between">
+          <label className="mr-2">Role:</label>
+          <select
+            name="role"
+            value={filter.role}
+            onChange={handleChange}
+            className="border rounded p-2"
           >
-            Filters
-          </div>
-          <div
-            style={{
-              height: "22vh",
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gridGap: "0px",
-              gridAutoRows: "minmax(73px, auto)",
-            }}>
-            <div style={{
-              gridRow: "1 / span 1", gridColumn: "1 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <TextField
-                name="dep_name"
-                label=" Dept. Name"
-                type="text"
-                value={filter.dep_name}
-                onChange={handleChange}
-              />
-            </div>
-            <div style={{
-              gridRow: "1 / span 1", gridColumn: "2 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <TextField
-                name="due_amount"
-                label="Due Amount"
-                type="text"
-                value={filter.due_amount}
-                onChange={handleChange}
-              />
-            </div>
-            <div style={{
-              gridRow: "1 / span 1", gridColumn: "3 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={filter.role}
-                    name="role"
-                    label="Role"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value='BTech'>B.Tech</MenuItem>
-                    <MenuItem value="MTech">M.Tech</MenuItem>
-                    <MenuItem value="PHD">PHD</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </div>
-            <div style={{
-              gridRow: "1 / span 1", gridColumn: "4 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Program</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={filter.academic_program}
-                    name="academic_program"
-                    label="Program"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value='CSE'>CSE</MenuItem>
-                    <MenuItem value="CBE">CBE</MenuItem>
-                    <MenuItem value="EEE">EEE</MenuItem>
-                    <MenuItem value="MNC">MNC</MenuItem>
-                    <MenuItem value="MME">MME</MenuItem>
-                    <MenuItem value="ME">ME</MenuItem>
-                    <MenuItem value="CE">CE</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </div>
-            <div style={{
-              gridRow: "2 / span 1", gridColumn: "1 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <TextField
-                name="start_date"
-                type="date"
-                value={filter.start_date}
-                onChange={handleChange}
-              />
-            </div>
-            <div style={{
-              gridRow: "2 / span 1", gridColumn: "2 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <TextField
-                name="end_date"
-                type="date"
-                value={filter.end_date}
-                onChange={handleChange}
-              />
-            </div>
-            <div style={{
-              gridRow: "2 / span 1", gridColumn: "3 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <div style={{
-                display: 'flex', display: 'flex',
-                width: '10vw',
-                justifyContent: 'center',
-                borderRadius: '25px',
-                background: 'rgba(119, 136, 153, 0.19)'
-              }}>
-                <div style={{ marginRight: '14px' }}>
-                  <label htmlFor="isActiveCheckbox">Is Active</label>
-                </div>
-                <input
-                  type="checkbox"
-                  id="isActiveCheckbox"
-                  name="is_Active"
-                  checked={filter.is_Active === 1}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div style={{
-              gridRow: "2 / span 1", gridColumn: "4 / span 1", display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: "98%",
-            }}>
-              <form className="bg-slate-100 p-2 rounded-lg flex items-center">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="bg-transparent focus:outline-none w-20 sm:w-64"
-                  />
-                </div>
-                <FaSearch className="text-slate-500" />
-              </form>
-            </div>
-          </div>
+            <option value="">Select Role</option>
+            <option value="B.Tech">B.Tech</option>
+            <option value="M.Tech">M.Tech</option>
+            <option value="Phd">PHD</option>
+          </select>
         </div>
-        <div style={{
-          display: 'flex',
-          width: '15%',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <div style={{
-            fontFamily: 'monospace',
-            padding: '12px',
-            marginLeft: '14px',
-            fontSize: 'x-large',
-            backgroundColor: "#001789c9",
-            borderRadius: '25px',
-            color: 'white'
-          }}>
-            <button onClick={handleClick}>
-              <GenericModal
-                buttonName="Open Modal"
-                modalTitle="Example Modal"
-              >
-                <CreateDueForm />
-              </GenericModal>
-            </button>
-          </div>
-        </div >
-      </div >
-    </>
+        <div className="flex items-center">
+          <label className="mr-2">Status:</label>
+          <select
+            name="status"
+            value={filter.status}
+            onChange={handleChange}
+            className="border rounded p-2"
+          >
+            <option value="">Select Status</option>
+            <option value="on hold">On hold</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div className="flex items-center">
+          <label className="mr-2">Start Date:</label>
+          <input
+            name="start_date"
+            type="date"
+            value={filter.start_date}
+            onChange={handleChange}
+            className="border rounded p-2"
+          />
+        </div>
+        <div className="flex items-center">
+          <label className="mr-2">End Date:</label>
+          <input
+            name="end_date"
+            type="date"
+            value={filter.end_date}
+            onChange={handleChange}
+            className="border rounded p-2"
+          />
+        </div>
+        <div className="flex items-center">
+          <button onClick={handleClick} className="bg-blue-500 text-white px-4 py-2 rounded-md">
+            Search
+          </button>
+        </div>
+        <div className="flex items-center">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+            <GenericModal buttonName={'Create Due'}>
+              <CreateDueForm setClick={setClick} />
+            </GenericModal>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -18,74 +18,81 @@ import checkDepartmentToken from '../service/checkDepartmentToken';
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
-    {
-        id: "reason",
-        label: "Department",
-        minWidth: 100,
-    },
-    {
-        id: "amount",
-        label: "Amount",
-        minWidth: 100,
-    },
-    {
-        id: "due_date",
-        label: "Due Date",
-        minWidth: 100,
-    },
+	{
+		id: 'reason',
+		label: 'Department',
+		minWidth: 100
+	},
+	{
+		id: 'amount',
+		label: 'Amount',
+		minWidth: 100
+	},
+	{
+		id: 'due_date',
+		label: 'Due Date',
+		minWidth: 100
+	}
 ];
 
 const Due = () => {
-    const navigator = useNavigate();
-    const token = checkDepartmentToken()
+	const navigator = useNavigate();
+	const token = checkDepartmentToken();
 
-    if (token === null) {
-        navigator('/');
-        return;
-    }
+	if (token === null) {
+		navigator('/');
+		return;
+	}
 
-    const [rows, setRows] = useState(null);
-    const [param, setParam] = useState([]);
-    const [loading, setLoading] = useState(true);
+	const [ rows, setRows ] = useState(null);
+    const [click, setClick] = useState(0);
+	const [ param, setParam ] = useState([]);
+	const [ loading, setLoading ] = useState(true);
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (e) => {
-        setAnchorEl(e.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+	const [ anchorEl, setAnchorEl ] = useState(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (e) => {
+		setAnchorEl(e.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 
-    useEffect(() => {
-        // console.log("Param: "+ param);
-        // console.log(token);
-        const fetchDepartmentDue = async () => {
-            try {
-                const rows = await getDepartmentDue(backendUri, token, param);
-                console.log("Data fetched:", rows.data);
-                setRows(rows.data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching department due:', error);
-            }
-        };
+	useEffect(
+		() => {
+			const fetchDepartmentDue = async () => {
+				try {
+                    const rows = await getDepartmentDue(backendUri, token, param);
+					console.log('Data fetched:', rows.data);
+					setRows(rows.data);
+					setLoading(false);
+				} catch (error) {
+					console.error('Error fetching department due:', error);
+				}
+			};
 
-        fetchDepartmentDue();
+			fetchDepartmentDue();
+		},
+		[ param , click]
+	);
 
-    }, [param]);
+	return (
+		<div className="flex flex-col h-full">
+			<Header label="DUE RECORD" isDep={true} />
 
-    return (
-        <>
-            <Header label="DUE RECORD" isDep={true} />
-            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
-                <div style={{ height: '100vh', width: '100%' }}>
-                    <Filter param={param} setParam={setParam} />
-                    {rows ? <StickyHeadTable rows={rows} columns={columns} isDep={true} /> : <div>Loading... </div>}
-                </div>
-            </div>
-        </>
-    );
+			<div className="flex flex-col overflow-auto h-full">
+				<div className="h-full w-full">
+                    <Filter param={param} setParam={setParam} setClick={setClick}  className="mb-4" />
+
+					{rows ? (
+						<StickyHeadTable rows={rows} columns={columns} isDep={true}  className="w-full" />
+					) : (
+						<div className="text-center">Loading...</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Due;

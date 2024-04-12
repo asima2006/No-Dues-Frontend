@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = {
     linkButton: {
@@ -73,8 +74,10 @@ const pageLinkData = [
 ];
 
 const DepartmentNavbar = () => {
+    const navigator = useNavigate()
     const logout = async () => {
-        console.log("clicked");
+        localStorage.clear();
+        navigator('/');
     }
 
     return (

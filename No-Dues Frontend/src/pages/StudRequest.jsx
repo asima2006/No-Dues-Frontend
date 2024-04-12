@@ -165,7 +165,7 @@ function StickyHeadTable({ rows, columns}) {
     };
 
     return (
-        <div className="container mx-auto">
+        <div style={{ margin: 'auto', width: '80vw' }}>
             <div className="w-full overflow-hidden mt-10">
                 <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
@@ -259,40 +259,9 @@ const columns = [
     },
 ];
 
-const rows = [
-    {
-        "id": "93eb3a15-6b3d-49ad-aea0-11e3d49d2c37",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    },
-    {
-        "id": "1f6a6203-0fc2-47c3-8792-0a250aa3fe86",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    }
-]
 
 export default function StudentRequest(){
+    const [rows, setRows] = useState([]);
     const [param, setParam] = useState([]);
     return(
         <>

@@ -148,7 +148,7 @@ function StickyHeadTable({ rows, columns }) {
     };
 
     return (
-        <div className="container mx-auto">
+        <div style={{ margin: 'auto', width: '80vw' }}>
             <div className="w-full overflow-hidden mt-10">
                 <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer sx={{ maxHeight: 440 }}>

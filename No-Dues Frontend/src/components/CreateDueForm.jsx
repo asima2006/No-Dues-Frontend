@@ -14,7 +14,7 @@ const paddingStyles = {
     wFull: { width: '100%' },
 };
 
-const CreateDueForm = () => {
+const CreateDueForm = ({ setClick }) => {
 
     const token = checkDepartmentToken()
 
@@ -77,7 +77,7 @@ const CreateDueForm = () => {
             // console.log(resp)
             if (response.status === 201) {
                 toast.success(resp.message)
-                // console.log(resp.message);
+                setClick(prev => prev + 1)
             } else {
                 toast.error(resp.message)
                 console.error('Failed to create due');

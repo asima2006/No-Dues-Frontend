@@ -3,10 +3,11 @@ import { authState } from '../context/auth/authState';
 import { backendUri } from '../env';
 import { useRecoilValue } from 'recoil';
 import Header from '../components/Nav';
+import checkDepartmentToken from '../service/checkDepartmentToken';
+import { toast } from 'react-toastify';
 
 const DepDash = () => {
-  const context = useRecoilValue(authState);
-  const { token } = context
+  const token = checkDepartmentToken();
   const [formstate, setFormState] = useState({});
   const handleChange = (e) => {
     setFormState({
@@ -25,7 +26,12 @@ const DepDash = () => {
         },
         body: JSON.stringify(formstate)
       });
-      console.log(res.status);
+      const data = await res.json();
+      if(res.status === 201 || res.status === 200){
+        toast.success(data.message);
+      }else{
+        toast.error(data.message);
+      }
     } catch (error) {
       console.log(error);
     }

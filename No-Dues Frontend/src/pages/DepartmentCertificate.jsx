@@ -95,20 +95,21 @@ export default function DepartmentCertificate() {
 			<div className="p-2 h-screen overflow-y-auto flex">
 				<div className="flex w-5/6">
 					<div className='border-2 w-full'>
-						<div className="flex-1 justify-between items-center p-2">
-							<Button
-								className={`${showCode ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`}
-								onClick={toggleCodeView}
-							>
-								Code
-							</Button>
-
-							<Button
-								className={`${!showCode ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`}
-								onClick={toggleCodeView}
-							>
-								Preview
-							</Button>
+						<div className="flex-1 items-center p-2">
+							<div className='mx-auto'>
+								<Button
+									className={`${showCode ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto`}
+									onClick={toggleCodeView}
+								>
+									Code
+								</Button>
+								<Button
+									className={`${!showCode ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-auto`}
+									onClick={toggleCodeView}
+								>
+									Preview
+								</Button>
+							</div>
 						</div>
 						<div className="">
 							{showCode ? (
