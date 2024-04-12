@@ -29,8 +29,6 @@ const App = () => {
             <Route path='/stud-request' element={<StudentRequests />} />
             <Route path='/stud-certificate' element={<StudentCertificate/>} />
             <Route path='/callback' element={<CallBack />} />
-            <Route path='/dep' element={<DepDash />} />
-            <Route path='/dues' element={<Due />} />
             <Route path='/department-dashboard' element={<DepDash />} />
             <Route path='/department-dues' element={<Due />} />
             <Route path='/department-communication' element={<CommunicationPage/>} />

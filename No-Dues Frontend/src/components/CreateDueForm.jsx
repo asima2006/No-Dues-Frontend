@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilValue } from 'recoil';
 import { authState } from '../context/auth/authState';
 import { backendUri } from '../env';
+import checkDepartmentToken from '../service/checkDepartmentToken';
+import removeNullParams from '../service/removeNullParams';
 
 const paddingStyles = {
     mb4: { marginBottom: 4 },
@@ -14,8 +16,7 @@ const paddingStyles = {
 
 const CreateDueForm = () => {
 
-    const context = useRecoilValue(authState);
-    const { token } = context
+    const token = checkDepartmentToken()
 
     const [formData, setFormData] = useState({
         student_rollnumber: '',
@@ -89,7 +90,6 @@ const CreateDueForm = () => {
 
     return (
         <>
-        <h1>token : {token ? 'Yes': 'No'}</h1>
         <form onSubmit={handleSubmit} className="p-8 bg-white shadow-md rounded-md">
             <TextField
                 name="student_rollnumber"
@@ -143,16 +143,7 @@ const CreateDueForm = () => {
                     )}
                 </div>
             ))}
-            <FormControlLabel
-                control={<Checkbox checked={formData.sendEmail} onChange={handleChange} name="sendEmail" />}
-                label="Send Email"
-                sx={{ ...paddingStyles.mb4 }}
-            />
-            <FormControlLabel
-                control={<Checkbox checked={formData.paymentLink} onChange={handleChange} name="paymentLink" />}
-                label="Payment Link"
-                sx={{ ...paddingStyles.mb4 }}
-            />
+
             {!formData.paymentLink && (
                 <TextField
                     name="paymentLinkURL"

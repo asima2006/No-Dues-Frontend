@@ -10,6 +10,7 @@ const CallBack = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const setAuth = useSetRecoilState(authState);
+  
   useEffect(() => {
     const handleMicrosoftAuthentication = async () => {
       try {
