@@ -16,8 +16,12 @@ import {
     Divider,
     Link
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { toast } from "react-toastify"
 import Header from "../components/Nav";
+import { backendUri } from "../env";
+import { useNavigate } from "react-router-dom";
+import checkDepartmentToken from "../service/checkDepartmentToken";
+import removeNullParams from "../service/removeNullParams";
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
@@ -137,6 +141,73 @@ function RequestDetailModal({ row }) {
     );
 }
 
+function DueDetailModal({ id }) {
+    const [data , setData] = useState(null)
+    const token = checkDepartmentToken();
+
+    useEffect(() => {
+        const fetchRequests = async () => {
+            try {
+                const response = await fetch(`${backendUri}/department/due/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.status !== 200) {
+                    toast.error('Failed to fetch students. Please refresh the page.');
+                    return;
+                }
+                const resp = await response.json();
+                setData(resp);
+                console.log(data);
+            } catch (error) {
+                toast.error('Failed to fetch student. Please refresh the page.');
+            }
+        }
+        fetchRequests()
+    }, [])
+    /*
+    {
+    "id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
+    "amount": 100,
+    "department": "Electrical",
+    "due_date": "15-03-2024 00:00:00",
+    "proof": [],
+    "reason": "Hostel fine",
+    "created_at": "15-03-2024 17:35:46",
+    "payment_url": null,
+    "status": "paid",
+    "student_roll_number": "2101ee36",
+    "student_name": "Heet Dhorajiya"
+}*/
+    return (
+        <>
+            {data ? (
+                <div sx={{ padding: '2rem' }} className="space-y-2">
+                    <Typography variant="body1" className="mb-1"><strong>Due ID:</strong> {data.id}</Typography>
+                    <Typography variant="body1" className="mb-1"><strong>Due Amount:</strong> {data.amount}</Typography>
+                    <Typography variant="body1" className="mb-1"><strong>Due Reason:</strong> {data.reason}</Typography>
+                    <Typography variant="body1" className="mb-1"><strong>Due Date:</strong> {data.due_date}</Typography>
+                    <Typography variant="body1" className="mb-1"><strong>Student Name:</strong> {data.student_name}</Typography>
+                    {/* Add more fields based on your data model */}
+                    <Typography variant="body1" className="mb-1"><strong>Status:</strong> {data.status}</Typography>
+                    <Typography variant="body1" className="mb-1"><strong>Created At:</strong> {data.created_at}</Typography>
+                    {data.payment_url && (
+                        <Typography variant="body1" className="mb-1"><strong>Payment Proof File:</strong> <Link href={data.payment_url} target="_blank" rel="noopener noreferrer">View Proof</Link></Typography>
+                    )}
+                    {data.proof.length > 0 && (
+                        <Typography variant="body1" className="mb-1"><strong>Proof:</strong> {data.proof.map((item, index) => (
+                            <Link key={index} href={item} target="_blank" rel="noopener noreferrer">Proof {index + 1}</Link>
+                        ))}</Typography>
+                    )}
+                </div>
+            ) : (<div>Loading...</div>)}
+        </>
+    );
+}
+
 
 function StickyHeadTable({ rows, columns}) {
     const [page, setPage] = useState(0);
@@ -144,6 +215,32 @@ function StickyHeadTable({ rows, columns}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
 
+    const handleRequestButton = async (action, id) => {
+        const token = checkDepartmentToken();
+        const actionResp = action ? 'accept' :'reject';
+        const response = await fetch(`${backendUri}/due/process-response`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer'+ token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                response: actionResp,
+                due_request_id: id
+            })
+        });
+
+        if (response.status !== 200) {
+            toast.error('Failed to perform the action, please try again later.');
+            return;
+        }
+        else{
+            const data = await response.json();
+            toast.success(data.message);
+        }
+
+
+    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -196,16 +293,26 @@ function StickyHeadTable({ rows, columns}) {
                                                 {columns.map((column) => {
                                                         return (
                                                             <TableCell key={column.id} align={column.align}>
-                                                                {row[column.id]}
+                                                                <Button>
+                                                                    <GenericModal buttonName={row[column.id]}>
+                                                                        <DueDetailModal id={row.due_id} />
+                                                                    </GenericModal>
+                                                                </Button>
                                                             </TableCell>
                                                         )
                                                     }
                                                 )}
                                                 <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <Button style={{ backgroundColor: '#4CAF50', color: 'white' }}>
+                                                    <Button
+                                                        style={{ backgroundColor: '#4CAF50', color: 'white' }}
+                                                        onClick={() => handleRequestButton(true, row.id)}
+                                                    >
                                                         Accept
                                                     </Button>
-                                                    <Button>
+                                                    <Button
+                                                        style={{ textTransform: 'none' }}
+                                                        onClick={() => handleRequestButton(false, row.id)}
+                                                    >
                                                         <GenericModal buttonName="Details">
                                                             <RequestDetailModal row={row}/>
                                                         </GenericModal>
@@ -260,47 +367,49 @@ const columns = [
     },
 ];
 
-const rows = [
-    {
-        "id": "93eb3a15-6b3d-49ad-aea0-11e3d49d2c37",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    },
-    {
-        "id": "1f6a6203-0fc2-47c3-8792-0a250aa3fe86",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    }
-]
+
+const url = '{{localhost}}'
 
 export default function DepartmentRequest(){
+    const [clicked, setClicked] = useState(0);
     const [param, setParam] = useState([]);
+    const [rows, setRows] = useState([]);
+    const navigator = useNavigate();
+    const token = checkDepartmentToken();
+
+    if (token === null) {
+        navigator('/');
+        return;
+    }
+    useEffect(() => {
+        const fetchRequests = async () => {
+            const queryParams = new URLSearchParams(removeNullParams(param));
+            try {
+                const response = await fetch(`${backendUri}/department/get-department-requests?${queryParams.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.status !== 200) {
+                    toast.error('Failed to fetch students. Please refresh the page.');
+                    return;
+                }
+                const data = await response.json();
+                setRows(data.data);
+            } catch (error) {
+                toast.error('Failed to fetch student. Please refresh the page.');
+            }
+        }
+        fetchRequests()
+    }, [clicked, param])
     return(
         <>
         <Header isDep={true} label={"REQUESTS"}/>
         <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
             <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
+            {rows ? <StickyHeadTable rows={rows} columns={columns}/> : <div>Loading... </div>}
         </div>
         </>
     )
