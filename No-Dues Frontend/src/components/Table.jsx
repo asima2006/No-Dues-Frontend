@@ -61,7 +61,7 @@ export default function StickyHeadTable({ rows, columns, isDep, isDash}) {
                       {column.label}
                     </TableCell>
                   ))}
-                  {isDash ? null : <TableCell>Details</TableCell>}
+                  {isDash ? <TableCell>Link</TableCell> : <TableCell>Details</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
