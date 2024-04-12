@@ -12,8 +12,6 @@ const paddingStyles = {
     wFull: { width: '100%' },
 };
 
-
-
 const CreateDueForm = () => {
 
     const context = useRecoilValue(authState);

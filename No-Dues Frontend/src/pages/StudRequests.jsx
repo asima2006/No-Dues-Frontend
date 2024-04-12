@@ -16,16 +16,18 @@ import {
     Divider,
     Link
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { toast } from "react-toastify"
 import Header from "../components/Nav";
+import { backendUri } from "../env";
+import { useNavigate } from "react-router-dom";
+import checkDepartmentToken from "../service/checkDepartmentToken";
+import removeNullParams from "../service/removeNullParams";
+import checkStudentToken from "../service/checkStudentToken";
 import StudentNav from "../components/StudentNav";
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
-        role: '',
-        academic_program: "",
-        start_date: "",
-        end_date: "",
+        status: '',
     });
 
     const handleChange = (e) => {
@@ -43,75 +45,31 @@ const Filter = ({ setParam }) => {
 
     return (
         <div className="w-full border-b border-black">
-            <div className="text-xl font-bold m-4">Filters</div>
-            <div className="flex item-center">
-                <div className="grid grid-cols-3 gap-4 p-4 w-5/6">
-                    <div className="flex items-center">
-                        <label className="mr-2">Academic Program:</label>
-                        <input
-                            name="academic_program"
-                            type="text"
-                            value={filter.academic_program}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        />
-                    </div>
-                    <div className="flex items-center">
-                        <label className="mr-2">Role:</label>
-                        <select
-                            name="role"
-                            value={filter.role}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        >
-                            <option value="">Select Role</option>
-                            <option value="B.Tech">B.Tech</option>
-                            <option value="M.Tech">M.Tech</option>
-                            <option value="Phd">PHD</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center">
+            <div className="flex justify-between items-center">
+                <div className="text-xl font-bold m-4">Filters</div>
+                <div className="flex items-center">
+                    <div className="flex items-center px-8">
                         <label className="mr-2">Status:</label>
                         <select
                             name="status"
-                            value={filter.role}
+                            value={filter.status}
                             onChange={handleChange}
                             className="border rounded p-2"
                         >
                             <option value="">Select Status</option>
-                            <option value="On hold">On hold</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Rejected">Rejected</option>
+                            <option value="ResponseStatus.ON_HOLD">On hold</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
                         </select>
                     </div>
-                    <div className="flex items-center">
-                        <label className="mr-2">Start Date:</label>
-                        <input
-                            name="start_date"
-                            type="date"
-                            value={filter.start_date}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        />
+                    <div className="flex items-center col-span-2 justify-center px-8 w-1/6 h-inherit">
+                        <button
+                            onClick={handleClick}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                        >
+                            Search
+                        </button>
                     </div>
-                    <div className="flex items-center">
-                        <label className="mr-2">End Date:</label>
-                        <input
-                            name="end_date"
-                            type="date"
-                            value={filter.end_date}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center col-span-2 justify-center w-1/6">
-                    <button
-                        onClick={handleClick}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                    >
-                        Search <FaSearch className="ml-2" />
-                    </button>
                 </div>
             </div>
         </div>
@@ -138,13 +96,38 @@ function RequestDetailModal({ row }) {
     );
 }
 
-
-function StickyHeadTable({ rows, columns}) {
+function StickyHeadTable({ rows, columns }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
 
+    const handleRequestButton = async (action, id) => {
+        const token = checkDepartmentToken();
+        const actionResp = action ? 'accept' : 'reject';
+        const response = await fetch(`${backendUri}/due/process-response`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                response: actionResp,
+                due_request_id: id
+            })
+        });
+
+        if (response.status !== 200) {
+            toast.error('Failed to perform the action, please try again later.');
+            return;
+        }
+        else {
+            const data = await response.json();
+            toast.success(data.message);
+        }
+
+
+    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -182,7 +165,6 @@ function StickyHeadTable({ rows, columns}) {
                                             {column.label}
                                         </TableCell>
                                     ))}
-                                    <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -195,26 +177,15 @@ function StickyHeadTable({ rows, columns}) {
                                                     {rowIndex + 1}
                                                 </TableCell>
                                                 {columns.map((column) => {
-                                                        return (
-                                                            <TableCell key={column.id} align={column.align}>
-                                                                {row[column.id]}
-                                                            </TableCell>
-                                                        )
-                                                    }
+                                                    return (
+                                                        <TableCell key={column.id} align={column.align}>
+                                                            <GenericModal buttonName={row[column.id]}>
+                                                                <RequestDetailModal row={row}/>
+                                                            </GenericModal>
+                                                        </TableCell>
+                                                    )
+                                                }
                                                 )}
-                                                <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <Button style={{ backgroundColor: '#4CAF50', color: 'white' }}>
-                                                        Accept
-                                                    </Button>
-                                                    <Button>
-                                                        <GenericModal buttonName="Details">
-                                                            <RequestDetailModal row={row}/>
-                                                        </GenericModal>
-                                                    </Button>
-                                                    <Button style={{ backgroundColor: '#F44336', color: 'white' }}>
-                                                        Reject
-                                                    </Button>
-                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -222,9 +193,9 @@ function StickyHeadTable({ rows, columns}) {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[1,2, 5, 10]}
+                        rowsPerPageOptions={[1, 2, 5, 10]}
                         component="div"
-                        count={Math.floor(rows.length/rowsPerPage) + (rows.length%rowsPerPage > 0 ? 1 : 0)}
+                        count={Math.floor(rows.length / rowsPerPage) + (rows.length % rowsPerPage > 0 ? 1 : 0)}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -235,6 +206,7 @@ function StickyHeadTable({ rows, columns}) {
         </div>
     );
 }
+
 
 const columns = [
     {
@@ -257,50 +229,54 @@ const columns = [
         label: "Response Mode",
         minWidth: 100,
     },
+    {
+        id:"status",
+        label:"Status",
+        minWidth:100
+    }
 ];
 
-const rows = [
-    {
-        "id": "93eb3a15-6b3d-49ad-aea0-11e3d49d2c37",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    },
-    {
-        "id": "1f6a6203-0fc2-47c3-8792-0a250aa3fe86",
-        "due_id": "9f70cab5-2bae-4ef8-a860-c96c68225af3",
-        "due_amount": 100,
-        "due_reason": "Hostel fine",
-        "student_name": "Heet Dhorajiya",
-        "academic_program": "Electrical and Electronincs Engineering",
-        "role": "B.Tech",
-        "student_roll_number": "2101ee36",
-        "response_mode": "external payment",
-        "status": "ResponseStatus.ON_HOLD",
-        "created_at": "22-03-2024 18:27:13",
-        "cancellation_reason": null,
-        "payment_proof_file": "https://example.com"
-    }
-]
-
-export default function StudentRequest(){
+export default function StudentRequests() {
+    const [clicked, setClicked] = useState(0);
     const [param, setParam] = useState([]);
-    return(
+    const [rows, setRows] = useState([]);
+    const navigator = useNavigate();
+    const token = checkStudentToken();
+
+    useEffect(() => {
+        if (token === null) {
+            navigator('/');
+            return;
+        }
+        const fetchRequests = async () => {
+            const queryParams = new URLSearchParams(removeNullParams(param));
+            try {
+                const response = await fetch(`${backendUri}/student/requests?${queryParams.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.status !== 200) {
+                    toast.error('Failed to fetch students. Please refresh the page.');
+                    return;
+                }
+                const data = await response.json();
+                setRows(data.data);
+            } catch (error) {
+                toast.error('Failed to fetch student. Please refresh the page.');
+            }
+        }
+        fetchRequests()
+    }, [clicked, param])
+    return (
         <>
-        <StudentNav label={"REQUESTS"}/>
-        <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
-            <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
-        </div>
+            <StudentNav label={"REQUESTS"} />
+            <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
+                <Filter param={param} setParam={setParam} />
+                {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
+            </div>
         </>
     )
 }

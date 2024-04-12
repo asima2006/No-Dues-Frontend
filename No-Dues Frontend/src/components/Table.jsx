@@ -118,7 +118,7 @@ export default function StickyHeadTable({ rows, columns, isDep, isDash}) {
                             return (
                               <TableCell key={column.id} align={column.align}>
                                 <Button>
-                                  {row.allow_certificate_generation == true ? (<Button variant="contained">ALLOWED</Button>) : (<Button variant="contained">NOT ALLOWED</Button>)}
+                                  {row.allow_certificate_generation == true ? (<Button href={row.id ? `stud-certificate?department_id=${row.id}` : `local`} variant="contained">ALLOWED</Button>) : (<Button variant="contained">NOT ALLOWED</Button>)}
                                 </Button>
                               </TableCell>
                             )
@@ -172,7 +172,16 @@ export default function StickyHeadTable({ rows, columns, isDep, isDash}) {
                                 return null;
                               })}
                             </Menu>
-                          ) : isDash ? (<Button variant="contained" id='link' href="/stud-dues"><EastIcon/></Button>) : (
+													) : isDash ? (
+
+														<Button
+															variant="contained"
+															id="link"
+															href="/stud-dues"
+														>
+															<EastIcon />
+														</Button>
+													) : (
                             <GenericModal
                               buttonName="Open Modal"
                               modalTitle="Example Modal"

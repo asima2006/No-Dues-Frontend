@@ -16,6 +16,7 @@ import DepartmentRequest from './pages/DepartmentRequests';
 import DepartmentManageStudent from './pages/DepartmentManageStudent';
 import StudentRequest from './pages/StudRequest';
 import StudentRequests from './pages/StudRequests';
+import StudentCertificate from './pages/StudentCertificate';
 
 const App = () => {
   return (
@@ -26,7 +27,8 @@ const App = () => {
             <Route path='/stud' element={<StudDash />} />
             <Route path='/stud-dues' element={<StudDues />} />
             <Route path='/stud-request' element={<StudentRequests />} />
-            <Route path='/stud-requests' element={<StudentRequest />} />
+            {/* <Route path='/stud-requests' element={<StudentRequest />} /> */}
+            <Route path='/stud-certificate' element={<StudentCertificate/>} />
             <Route path='/callback' element={<CallBack />} />
             <Route path='/dep' element={<DepDash />} />
             <Route path='/dues' element={<Due />} />

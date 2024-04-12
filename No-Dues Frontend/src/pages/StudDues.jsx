@@ -22,6 +22,7 @@ import { toast } from "react-toastify"
 import removeNullParams from "../service/removeNullParams";
 import checkStudentToken from "../service/checkStudentToken";
 import StudRequestsForm from "../components/StudentRequestForm";
+import StudentNav from "../components/StudentNav";
 
 const columns = [
   {
@@ -74,9 +75,9 @@ const Filter = ({ setParam, setClicked }) => {
               className="border rounded p-2"
             >
               <option value="">Select Status</option>
-              <option value="ResponseStatus.ON_HOLD">On hold</option>
-              <option value="accepted">Accepted</option>
-              <option value="rejected">Rejected</option>
+              <option value="paid">paid</option>
+              <option value="DueStatus.PENDING">Pending</option>
+              <option value="cancelled">cancelled</option>
             </select>
           </div>
           <div className="flex items-center col-span-2 justify-center px-8 w-1/6 h-inherit">
@@ -216,7 +217,7 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
                               row['request_sent'] ?
                             (
                               <GenericModal buttonName="Create request" >
-                                <StudRequestsForm />
+                                <StudRequestsForm dueId={row['id']} />
                               </GenericModal>
                             ) : ("Request Sent")
                             }
@@ -282,7 +283,7 @@ export default function StudDues() {
 
   return (
     <>
-      <Header label={"MANAGE STUDENTS"} isDep={true} />
+      <StudentNav label={"MANAGE STUDENTS"} />
       <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
         <Filter param={param} setParam={setParam} setClicked={setClicked} />
         {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked} /> : <div>Loading... </div>}
