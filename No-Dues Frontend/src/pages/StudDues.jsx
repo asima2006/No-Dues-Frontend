@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Nav'
-import StickyHeadTable from '../components/Table'
-import FilterDash from './Filters/FilterDash';
-
-const rows = [
-  {
-    "id": "f9f1a6d0-7b46-4cf9-b97c-de31ffd22d9e",
-    "amount": 100,
-    "due_date": "2024-03-15T00:00:00Z",
-    "roll_number": "2201cb33",
-    "status": "success",
-    "reason": "Tuition fee",
-    "created_at": "2024-03-26T08:08:41.731894Z"
-  }
-];
+import { FaSearch } from "react-icons/fa";
+import CreateDueForm from "../components/CreateDueForm";
+import GenericModal from "../components/GenericModal";
+import React, { useEffect, useState } from "react";
+import {
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TablePagination,
+  Button,
+  Typography,
+} from "@mui/material";
+import checkDepartmentToken from "../service/checkDepartmentToken";
+import { useNavigate } from "react-router-dom";
+import { backendUri } from "../env";
+import Header from '../components/Nav';
+import { toast } from "react-toastify"
+import removeNullParams from "../service/removeNullParams";
+import checkStudentToken from "../service/checkStudentToken";
+import StudRequestsForm from "../components/StudentRequestForm";
 
 const columns = [
   {
@@ -31,26 +39,254 @@ const columns = [
     label: "Due Date",
     minWidth: 100,
   },
-  {
-    id: "status",
-    label: "Status",
-    minWidth: 100,
-  },
 ];
 
-const StudDues = () => {
-  const [param, setParam] = useState([]);
-  useEffect(() => {
-    console.log(param);
-    // add api to fetch specific students dues
-  }, [param])
+
+const Filter = ({ setParam, setClicked }) => {
+  const [filter, setFilter] = useState({
+    status: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFilter((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
+    }));
+  };
+
+  const handleClick = () => {
+    setParam(filter);
+    console.log(filter);
+  };
+
   return (
-    <div>
-      <Header label="DUES RECORD" />
-      <FilterDash setParam={setParam} />
-      <StickyHeadTable rows={rows} columns={columns} isDep={false} />
+    <div className="w-full border-b border-black">
+      <div className="flex justify-between items-center">
+        <div className="text-xl font-bold m-4">Filters</div>
+        <div className="flex items-center">
+          <div className="flex items-center px-8">
+            <label className="mr-2">Status:</label>
+            <select
+              name="status"
+              value={filter.status}
+              onChange={handleChange}
+              className="border rounded p-2"
+            >
+              <option value="">Select Status</option>
+              <option value="ResponseStatus.ON_HOLD">On hold</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div className="flex items-center col-span-2 justify-center px-8 w-1/6 h-inherit">
+            <button
+              onClick={handleClick}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
+};
+
+
+function StudentDetailModal({ id }) {
+  const token = checkStudentToken()
+  const [row,setRow] = useState(null);
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await fetch(`${backendUri}/student/due/${id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (response.status !== 200) {
+          toast.error('Failed to fetch students. Please refresh the page.');
+          return;
+        }
+        const resp = await response.json();
+        setRow(resp);
+      } catch (error) {
+        toast.error('Failed to fetch student. Please refresh the page.');
+      }
+    }
+    fetchRequests()
+  }, [])
+  return (
+    <>
+      {row ? (
+        <div className="p-4 space-y-2">
+          <Typography variant="body1" className="mb-1"><strong>ID:</strong> {row.id}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Amount:</strong> {row.amount}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Department:</strong> {row.department}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Due Date:</strong> {row.due_date}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Reason:</strong> {row.reason}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Created At:</strong> {row.created_at}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Payment URL:</strong> {row.payment_url}</Typography>
+          <Typography variant="body1" className="mb-1"><strong>Status:</strong> {row.status}</Typography>
+        </div>
+      ) : <>Loading...</>}
+    </>
+
+  );
 }
 
-export default StudDues
+
+function StickyHeadTable({ rows, columns, navigator, setClicked }) {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const token = checkStudentToken();
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleMenuOpen = (event, row) => {
+    setSelectedRow(row);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRow(null);
+  };
+
+  return (
+    <div className="container mx-auto">
+      <div className="w-full overflow-hidden mt-10">
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>S. No.</TableCell>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      className="min-w-[100px]"
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                  <TableCell>Create request</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, rowIndex) => {
+                    return (
+                      <TableRow hover tabIndex={-1} key={rowIndex}>
+                        <TableCell>
+                          {rowIndex + 1}
+                        </TableCell>
+                        {columns.map((column) => {
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              <GenericModal buttonName={row[column.id]} >
+                                <StudentDetailModal id={row.id} />
+                              </GenericModal>
+                            </TableCell>
+                          )
+                        }
+                        )}
+                        <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <Button
+                            style={{
+                              backgroundColor: row['request_sent']  ? '#008080' : 'green',
+                              color: 'white'
+                            }}
+                          >
+                            {
+                              row['request_sent'] ?
+                            (
+                              <GenericModal buttonName="Create request" >
+                                <StudRequestsForm />
+                              </GenericModal>
+                            ) : ("Request Sent")
+                            }
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[1, 2, 5, 10]}
+            component="div"
+            count={Math.floor(rows.length / rowsPerPage) + (rows.length % rowsPerPage > 0 ? 1 : 0)}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
+    </div>
+  );
+}
+
+
+export default function StudDues() {
+  const [clicked, setClicked] = useState(0);
+  const [param, setParam] = useState([]);
+  const [rows, setRows] = useState([]);
+  const navigator = useNavigate();
+  const token = checkStudentToken();
+
+  useEffect(() => {
+    console.log(token)
+    if (token === null) {
+      navigator('/');
+      return;
+    }
+    const fetchStudents = async () => {
+      const queryParams = new URLSearchParams(removeNullParams(param));
+      try {
+        const response = await fetch(`${backendUri}/student/dues?${queryParams.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (response.status !== 200) {
+          toast.error('Failed to fetch dues. Please refresh the page.');
+          return;
+        }
+        const data = await response.json();
+        setRows(data.data);
+      } catch (error) {
+        toast.error('Failed to fetch student. Please refresh the page.');
+      }
+    }
+    fetchStudents()
+  }, [clicked, param])
+
+  return (
+    <>
+      <Header label={"MANAGE STUDENTS"} isDep={true} />
+      <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
+        <Filter param={param} setParam={setParam} setClicked={setClicked} />
+        {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked} /> : <div>Loading... </div>}
+      </div>
+    </>
+  )
+}
