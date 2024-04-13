@@ -287,7 +287,7 @@ function StickyHeadTable({ rows, columns, setClicked }) {
                                                 </Button>
                                                 <Button
                                                     style={{ backgroundColor: '#F44336', color: 'white' }}
-                                                    onClick={() => handleRequestButton(true, row.id)}
+                                                    onClick={() => handleRequestButton(false, row.id)}
                                                 >
                                                     Reject
                                                 </Button>
