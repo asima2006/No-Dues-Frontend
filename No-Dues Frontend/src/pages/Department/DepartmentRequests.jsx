@@ -344,11 +344,12 @@ export default function DepartmentRequest() {
     const navigator = useNavigate();
     const token = checkDepartmentToken();
 
-    if (token === null) {
-        navigator('/');
-        return;
-    }
+    
     useEffect(() => {
+        if (token === null) {
+            navigator('/');
+            return;
+        }
         const fetchRequests = async () => {
             const queryParams = new URLSearchParams(removeNullParams(param));
             try {
