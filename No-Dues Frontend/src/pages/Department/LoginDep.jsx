@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { authState, userTypeValues } from "../context/auth/authState";
+import { authState, userTypeValues } from "../../context/auth/authState";
 import { useNavigate } from "react-router-dom";
-import { backendUri } from "../env";
+import { backendUri } from "../../env";
 import { toast } from "react-toastify";
 
 const LoginDep = () => {

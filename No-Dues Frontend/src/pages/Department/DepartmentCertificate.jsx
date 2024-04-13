@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Box, TextField, ListItem } from '@mui/material';
 import { ErrorBoundary } from 'react-error-boundary';
-import { backendUri } from '../env';
-import checkDepartmentToken from '../service/checkDepartmentToken';
+import { backendUri } from '../../env';
+import checkDepartmentToken from '../../service/checkDepartmentToken';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Header from '../components/Nav';
+import Header from '../../components/Nav';
 
 export default function DepartmentCertificate() {
 	const [code, setCode] = useState('<div>Loading...</div>');
@@ -113,7 +113,7 @@ export default function DepartmentCertificate() {
 						</div>
 						<div className="">
 							{showCode ? (
-								<div className="flex flex-col h-full">
+								<div className="flex flex-col">
 									<div className="flex-1 overflow-y-auto p-2">
 										<TextField
 											multiline

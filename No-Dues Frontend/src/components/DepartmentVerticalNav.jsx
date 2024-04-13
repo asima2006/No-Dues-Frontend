@@ -75,7 +75,7 @@ const pageLinkData = [
 
 const DepartmentNavbar = () => {
     const navigator = useNavigate()
-    const logout = async () => {
+    const signout = async () => {
         localStorage.clear();
         navigator('/');
     }
@@ -91,7 +91,7 @@ const DepartmentNavbar = () => {
                 )}
             </div>
             <div className="logoutButtonWrapped" style={useStyles.logoutButtonWrapped}>
-                <button className="logoutButton" style={useStyles.logoutButton} onClick={logout}>
+                <button className="logoutButton" style={useStyles.logoutButton} onClick={signout}>
                     Sign Out
                 </button>
             </div>

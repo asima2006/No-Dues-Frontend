@@ -7,7 +7,7 @@ import iitplogo from "/iitplogo.png";
 import ezdueslogo from "/ezdueslogo.png";
 import mslogo from "/mslogo.png";
 import iitplogo2 from "/iitplogoOG.png";
-import LoginDep from "./LoginDep";
+import LoginDep from "./Department/LoginDep";
 import { toast } from "react-toastify";
 
 const New = () => {

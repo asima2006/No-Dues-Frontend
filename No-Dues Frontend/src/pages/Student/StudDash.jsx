@@ -3,10 +3,10 @@ import Avatar from '@mui/material/Avatar';
 import logo from '/logo1.jpg';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button } from '@mui/material';
-import StickyHeadTable from '../components/Table';
-import { backendUri } from '../env';
-import checkStudentToken from '../service/checkStudentToken';
-import StudentNav from '../components/StudentNav';
+import StickyHeadTable from '../../components/Table';
+import { backendUri } from '../../env';
+import checkStudentToken from '../../service/checkStudentToken';
+import StudentNav from '../../components/StudentNav';
 
 const columns = [
 	{

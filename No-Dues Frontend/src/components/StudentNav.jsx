@@ -1,22 +1,28 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const links = [
     {
-        link: "/stud",
+        link: "/student",
         title:"Profile"
     },
     {
-        link: "/stud-dues",
+        link: "/student-dues",
         title: "Dues"
     },
     {
-        link: "/stud-request",
+        link: "/student-request",
         title: "Requests"
     },
 ]
 
 const StudentNav = ({ label }) => {
+    const navigator = useNavigate()
+    const handleClick = () => {
+        localStorage.clear();
+        navigator('/');
+    }
     return (
         <>
             <header className='bg-slate-200 shadow-md'>
@@ -42,6 +48,9 @@ const StudentNav = ({ label }) => {
                                 {linkObj.title}
                             </Link>
                         ))}
+                        <div className='ml-2 cursor-pointer hover:' onClick={handleClick}>
+                            <LogoutIcon/>
+                        </div>
                     </div>
                 </div>
             </header>

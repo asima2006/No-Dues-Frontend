@@ -4,17 +4,17 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import StickyHeadTable from '../components/Table';
-import Header from '../components/Nav';
-import CreateDueForm from '../components/CreateDueForm';
-import GenericModal from '../components/GenericModal';
-import { getDepartmentDue } from '../service/fetchDepartmentDue';
+import StickyHeadTable from '../../components/Table';
+import Header from '../../components/Nav';
+import CreateDueForm from '../../components/CreateDueForm';
+import GenericModal from '../../components/GenericModal';
+import { getDepartmentDue } from '../../service/fetchDepartmentDue';
 import { useRecoilValue } from 'recoil';
-import { authState } from '../context/auth/authState';
+import { authState } from '../../context/auth/authState';
 import { Button } from '@mui/base';
-import { backendUri } from '../env';
-import Filter from './Filters/Filter';
-import checkDepartmentToken from '../service/checkDepartmentToken';
+import { backendUri } from '../../env';
+import Filter from '../Filters/Filter';
+import checkDepartmentToken from '../../service/checkDepartmentToken';
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
@@ -39,11 +39,6 @@ const Due = () => {
 	const navigator = useNavigate();
 	const token = checkDepartmentToken();
 
-	if (token === null) {
-		navigator('/');
-		return;
-	}
-
 	const [ rows, setRows ] = useState(null);
     const [click, setClick] = useState(0);
 	const [ param, setParam ] = useState([]);
@@ -60,6 +55,10 @@ const Due = () => {
 
 	useEffect(
 		() => {
+			if (token === null) {
+				navigator('/');
+				return;
+			}
 			const fetchDepartmentDue = async () => {
 				try {
                     const rows = await getDepartmentDue(backendUri, token, param);
@@ -80,8 +79,8 @@ const Due = () => {
 		<div className="flex flex-col h-full">
 			<Header label="DUE RECORD" isDep={true} />
 
-			<div className="flex flex-col overflow-auto h-full">
-				<div className="h-full w-full">
+			<div className="flex flex-col overflow-auto">
+				<div style={{height: '90vh'}} className=" w-full">
                     <Filter param={param} setParam={setParam} setClick={setClick}  className="mb-4" />
 
 					{rows ? (

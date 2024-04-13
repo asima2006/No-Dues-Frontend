@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { backendUri } from '../env';
-import checkStudentToken from '../service/checkStudentToken';
+import { backendUri } from '../../env';
+import checkStudentToken from '../../service/checkStudentToken';
 import { toast } from 'react-toastify';
 import html2pdf from 'html2pdf.js';
 import { Box, Button, Typography } from '@mui/material';

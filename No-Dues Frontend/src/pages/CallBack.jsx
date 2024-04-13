@@ -38,7 +38,7 @@ const CallBack = () => {
             localStorage.setItem('token', token);
             localStorage.setItem('userType', userTypeValues.student);
 
-            navigate('/stud')
+            navigate('/student');
             toast('Login successful');
           } else {
             console.error('Login failed');
@@ -50,7 +50,7 @@ const CallBack = () => {
     };
 
     handleMicrosoftAuthentication();
-  }, [location.search]);
+  }, []);
 
   return (
     <div>

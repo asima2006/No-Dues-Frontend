@@ -4,7 +4,7 @@ import { List, TextFields } from '@mui/icons-material';
 import { useRecoilState } from 'recoil';
 import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
-import Header from '../components/Nav';
+import Header from '../../components/Nav';
 
 export default function CommunicationPage() {
 

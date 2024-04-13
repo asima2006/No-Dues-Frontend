@@ -1,6 +1,6 @@
 import { FaSearch } from "react-icons/fa";
-import CreateDueForm from "../components/CreateDueForm";
-import GenericModal from "../components/GenericModal";
+import CreateDueForm from "../../components/CreateDueForm";
+import GenericModal from "../../components/GenericModal";
 import React, { useEffect, useState } from "react";
 import {
     Paper,
@@ -17,11 +17,11 @@ import {
     Link
 } from "@mui/material";
 import { toast } from "react-toastify"
-import Header from "../components/Nav";
-import { backendUri } from "../env";
+import Header from "../../components/Nav";
+import { backendUri } from "../../env";
 import { useNavigate } from "react-router-dom";
-import checkDepartmentToken from "../service/checkDepartmentToken";
-import removeNullParams from "../service/removeNullParams";
+import checkDepartmentToken from "../../service/checkDepartmentToken";
+import removeNullParams from "../../service/removeNullParams";
 
 const Filter = ({ setParam }) => {
     const [filter, setFilter] = useState({
@@ -375,7 +375,7 @@ export default function DepartmentRequest() {
     return (
         <>
             <Header isDep={true} label={"REQUESTS"} />
-            <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
+            <div style={{ height: '90vh', width: '100%', padding: '4px' }}>
                 <Filter setParam={setParam} />
                 {rows ? <StickyHeadTable rows={rows} columns={columns} setClicked={setClicked}/> : <div>Loading... </div>}
             </div>

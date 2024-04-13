@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { authState } from '../context/auth/authState';
-import { backendUri } from '../env';
+import { authState } from '../../context/auth/authState';
+import { backendUri } from '../../env';
 import { useRecoilValue } from 'recoil';
-import Header from '../components/Nav';
-import checkDepartmentToken from '../service/checkDepartmentToken';
+import Header from '../../components/Nav';
+import checkDepartmentToken from '../../service/checkDepartmentToken';
 import { toast } from 'react-toastify';
 
 const DepDash = () => {

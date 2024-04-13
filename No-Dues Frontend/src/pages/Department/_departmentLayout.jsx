@@ -1,5 +1,5 @@
 import React from 'react';
-import DepartmentVerticalNav from '../components/DepartmentVerticalNav';
+import DepartmentVerticalNav from '../../components/DepartmentVerticalNav';
 
 const DepartmentLayout = ({ children }) => {
     return (

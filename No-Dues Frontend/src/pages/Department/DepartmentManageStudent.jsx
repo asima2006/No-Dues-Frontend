@@ -1,6 +1,6 @@
 import { FaSearch } from "react-icons/fa";
-import CreateDueForm from "../components/CreateDueForm";
-import GenericModal from "../components/GenericModal";
+import CreateDueForm from "../../components/CreateDueForm";
+import GenericModal from "../../components/GenericModal";
 import React, { useEffect, useState } from "react";
 import {
     Paper,
@@ -13,19 +13,38 @@ import {
     TablePagination,
     Button,
     Typography,
-    Divider,
-    Link
 } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Header from "../components/Nav";
-import StudentNav from "../components/StudentNav";
+import checkDepartmentToken from "../../service/checkDepartmentToken";
+import { useNavigate } from "react-router-dom";
+import { backendUri } from "../../env";
+import Header from '../../components/Nav';
+import {toast} from "react-toastify"
+import removeNullParams from "../../service/removeNullParams";
 
-const Filter = ({ setParam }) => {
+const columns = [
+    {
+        id: "first_name",
+        label: "First Name",
+        minWidth: 100,
+    },
+    {
+        id: "roll_number",
+        label: "Roll Number",
+        minWidth: 100,
+    },
+    {
+        id: "role",
+        label: "Role",
+        minWidth: 100,
+    },
+];
+
+
+const Filter = ({ setParam , setClicked}) => {
     const [filter, setFilter] = useState({
-        role: '',
-        academic_program: "",
-        start_date: "",
-        end_date: "",
+        role: null,
+        academic_program: null,
+        joining_year: null,
     });
 
     const handleChange = (e) => {
@@ -38,6 +57,7 @@ const Filter = ({ setParam }) => {
 
     const handleClick = () => {
         setParam(filter);
+        setClicked((prev) => prev + 1);
         console.log(filter);
     };
 
@@ -71,35 +91,11 @@ const Filter = ({ setParam }) => {
                         </select>
                     </div>
                     <div className="flex items-center">
-                        <label className="mr-2">Status:</label>
-                        <select
-                            name="status"
-                            value={filter.role}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        >
-                            <option value="">Select Status</option>
-                            <option value="On hold">On hold</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Rejected">Rejected</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center">
-                        <label className="mr-2">Start Date:</label>
+                        <label className="mr-2">Joining Year:</label>
                         <input
-                            name="start_date"
-                            type="date"
-                            value={filter.start_date}
-                            onChange={handleChange}
-                            className="border rounded p-2"
-                        />
-                    </div>
-                    <div className="flex items-center">
-                        <label className="mr-2">End Date:</label>
-                        <input
-                            name="end_date"
-                            type="date"
-                            value={filter.end_date}
+                            name="joining_year"
+                            type="text"
+                            value={filter.joining_year}
                             onChange={handleChange}
                             className="border rounded p-2"
                         />
@@ -118,33 +114,32 @@ const Filter = ({ setParam }) => {
     );
 };
 
-function RequestDetailModal({ row }) {
+
+function StudentDetailModal({ row }) {
     return (
-        <div sx={{ padding: '2rem' }} className="space-y-2">
-            <Typography variant="body1" className="mb-1"><strong>Due ID:</strong> {row.due_id}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Due Amount:</strong> {row.due_amount}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Due Reason:</strong> {row.due_reason}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Student Name:</strong> {row.student_name}</Typography>
+        <div className="p-4 space-y-2">
+            <Typography variant="body1" className="mb-1"><strong>Roll Number:</strong> {row.roll_number}</Typography>
+            <Typography variant="body1" className="mb-1"><strong>First Name:</strong> {row.first_name}</Typography>
+            <Typography variant="body1" className="mb-1"><strong>Last Name:</strong> {row.last_name}</Typography>
+            <Typography variant="body1" className="mb-1"><strong>Email:</strong> {row.email}</Typography>
             <Typography variant="body1" className="mb-1"><strong>Academic Program:</strong> {row.academic_program}</Typography>
             <Typography variant="body1" className="mb-1"><strong>Role:</strong> {row.role}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Student Roll Number:</strong> {row.student_roll_number}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Response Mode:</strong> {row.response_mode}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Status:</strong> {row.status}</Typography>
-            <Typography variant="body1" className="mb-1"><strong>Created At:</strong> {row.created_at}</Typography>
-            {row.payment_proof_file && (
-                <Typography variant="body1" className="mb-1"><strong>Payment Proof File:</strong> <Link href={row.payment_proof_file} target="_blank" rel="noopener noreferrer">View Proof</Link></Typography>
-            )}
+            <Typography variant="body1" className="mb-1"><strong>Allow Certificate Generation:</strong> {row.allow_certificate_generation ? 'Yes' : 'No'}</Typography>
         </div>
     );
 }
 
-
-function StickyHeadTable({ rows, columns}) {
+function StickyHeadTable({ rows, columns, navigator, setClicked }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
 
+    const token = checkDepartmentToken();
+    if(token === null){
+        navigator('/');
+        return;
+    }
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -164,6 +159,31 @@ function StickyHeadTable({ rows, columns}) {
         setSelectedRow(null);
     };
 
+    const handleToogleButton = async (roll_number) => {
+        try {
+            const response = await fetch(`${backendUri}/department/switch-certificate-generation-permission`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    "roll_number":roll_number
+                })
+            });
+
+            const data = await response.json();
+            if(response.status === 200){
+                toast.success(data.message)
+                setClicked((prev) => prev + 1);
+            }
+            else{
+                toast.error("Error occured",data.message);
+            }
+        } catch (error) {
+            toast.error('Failed to switch permission');
+        }
+    }
     return (
         <div style={{ margin: 'auto', width: '80vw' }}>
             <div className="w-full overflow-hidden mt-10">
@@ -182,7 +202,7 @@ function StickyHeadTable({ rows, columns}) {
                                             {column.label}
                                         </TableCell>
                                     ))}
-                                    <TableCell>Actions</TableCell>
+                                    <TableCell>Certificate Generation</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -195,24 +215,27 @@ function StickyHeadTable({ rows, columns}) {
                                                     {rowIndex + 1}
                                                 </TableCell>
                                                 {columns.map((column) => {
-                                                        return (
-                                                            <TableCell key={column.id} align={column.align}>
-                                                                {row[column.id]}
-                                                            </TableCell>
-                                                        )
-                                                    }
+                                                    return (
+                                                        <TableCell key={column.id} align={column.align}>
+                                                            {row[column.id]}
+                                                        </TableCell>
+                                                    )
+                                                }
                                                 )}
                                                 <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                    <Button style={{ backgroundColor: '#4CAF50', color: 'white' }}>
-                                                        Accept
-                                                    </Button>
                                                     <Button>
                                                         <GenericModal buttonName="Details">
-                                                            <RequestDetailModal row={row}/>
+                                                            <StudentDetailModal row={row} />
                                                         </GenericModal>
                                                     </Button>
-                                                    <Button style={{ backgroundColor: '#F44336', color: 'white' }}>
-                                                        Reject
+                                                    <Button
+                                                        style={{
+                                                            backgroundColor: row.allow_certificate_generation ? '#F44336' : '#4CAF50',
+                                                            color: 'white'
+                                                        }}
+                                                        onClick={() => handleToogleButton(row['roll_number'])}
+                                                    >
+                                                        {row.allow_certificate_generation ? 'Disable' : 'Enable'}
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -222,9 +245,9 @@ function StickyHeadTable({ rows, columns}) {
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[1,2, 5, 10]}
+                        rowsPerPageOptions={[1, 2, 5, 10]}
                         component="div"
-                        count={Math.floor(rows.length/rowsPerPage) + (rows.length%rowsPerPage > 0 ? 1 : 0)}
+                        count={Math.floor(rows.length / rowsPerPage) + (rows.length % rowsPerPage > 0 ? 1 : 0)}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -236,39 +259,49 @@ function StickyHeadTable({ rows, columns}) {
     );
 }
 
-const columns = [
-    {
-        id: "due_reason",
-        label: "Due Reason",
-        minWidth: 100,
-    },
-    {
-        id: "student_roll_number",
-        label: "Roll Number",
-        minWidth: 100,
-    },
-    {
-        id: "due_amount",
-        label: "Amount",
-        minWidth: 100,
-    },
-    {
-        id: "response_mode",
-        label: "Response Mode",
-        minWidth: 100,
-    },
-];
 
-
-export default function StudentRequest(){
-    const [rows, setRows] = useState([]);
+export default function DepartmentManageStudent() {
+    const [clicked, setClicked] = useState(0);
     const [param, setParam] = useState([]);
-    return(
+    const [rows, setRows] = useState([]);
+    const navigator = useNavigate();
+    const token = checkDepartmentToken();
+
+    if (token === null){
+        navigator('/');
+        return;
+    }
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            const queryParams = new URLSearchParams(removeNullParams(param));
+            try {
+                const response = await fetch(`${backendUri}/department/get-department-students?${queryParams.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if(response.status !== 200){
+                    toast.error('Failed to fetch students. Please refresh the page.');
+                    return;
+                }
+                const data = await response.json();
+                setRows(data.data);
+            } catch (error) {
+                toast.error('Failed to fetch student. Please refresh the page.');
+            }
+        }
+        fetchStudents()
+    }, [clicked,param])
+
+    return (
         <>
-        <StudentNav label={"REQUESTS"}/>
-        <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
-            <Filter param={param} setParam={setParam} />
-            {rows ? <StickyHeadTable rows={rows} columns={columns} /> : <div>Loading... </div>}
+        <Header label={"MANAGE STUDENTS"} isDep={true} />
+        <div style={{ width: '100%', padding: '4px' }}>
+            <Filter param={param} setParam={setParam} setClicked={setClicked} />
+            {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked}/> : <div>Loading... </div>}
         </div>
         </>
     )

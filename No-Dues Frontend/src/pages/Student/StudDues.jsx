@@ -1,6 +1,6 @@
 import { FaSearch } from "react-icons/fa";
-import CreateDueForm from "../components/CreateDueForm";
-import GenericModal from "../components/GenericModal";
+import CreateDueForm from "../../components/CreateDueForm";
+import GenericModal from "../../components/GenericModal";
 import React, { useEffect, useState } from "react";
 import {
   Paper,
@@ -14,15 +14,15 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import checkDepartmentToken from "../service/checkDepartmentToken";
+import checkDepartmentToken from "../../service/checkDepartmentToken";
 import { useNavigate } from "react-router-dom";
-import { backendUri } from "../env";
-import Header from '../components/Nav';
+import { backendUri } from "../../env";
+import Header from '../../components/Nav';
 import { toast } from "react-toastify"
-import removeNullParams from "../service/removeNullParams";
-import checkStudentToken from "../service/checkStudentToken";
-import StudRequestsForm from "../components/StudentRequestForm";
-import StudentNav from "../components/StudentNav";
+import removeNullParams from "../../service/removeNullParams";
+import checkStudentToken from "../../service/checkStudentToken";
+import StudRequestsForm from "../../components/StudentRequestForm";
+import StudentNav from "../../components/StudentNav";
 
 const columns = [
   {
@@ -284,7 +284,7 @@ export default function StudDues() {
   return (
     <>
       <StudentNav label={"MANAGE STUDENTS"} />
-      <div style={{ height: '100vh', width: '100%', padding: '4px' }}>
+      <div style={{ height: '90vh', width: '100%', padding: '4px' }}>
         <Filter param={param} setParam={setParam} setClicked={setClicked} />
         {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked} /> : <div>Loading... </div>}
       </div>
