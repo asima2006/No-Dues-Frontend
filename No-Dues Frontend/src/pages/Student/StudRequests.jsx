@@ -215,11 +215,6 @@ const columns = [
         minWidth: 100,
     },
     {
-        id: "student_roll_number",
-        label: "Roll Number",
-        minWidth: 100,
-    },
-    {
         id: "due_amount",
         label: "Amount",
         minWidth: 100,

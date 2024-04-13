@@ -181,10 +181,10 @@ function DueDetailModal({ id }) {
                     <Typography variant="body1" className="mb-1"><strong>Status:</strong> {data.status}</Typography>
                     <Typography variant="body1" className="mb-1"><strong>Created At:</strong> {data.created_at}</Typography>
                     {data.payment_url && (
-                        <Typography variant="body1" className="mb-1"><strong>Payment Proof File:</strong> <Link href={data.payment_url} target="_blank" rel="noopener noreferrer">View Proof</Link></Typography>
+                        <Typography variant="body1" className="mb-1"><strong>Due Payment url:</strong> <Link href={data.payment_url} target="_blank" rel="noopener noreferrer">View Proof</Link></Typography>
                     )}
                     {data.proof.length > 0 && (
-                        <Typography variant="body1" className="mb-1"><strong>Proof:</strong> {data.proof.map((item, index) => (
+                        <Typography variant="body1" className="mb-1"><strong>Due Proof:</strong> {data.proof.map((item, index) => (
                             <Link key={index} href={item} target="_blank" rel="noopener noreferrer">Proof {index + 1}</Link>
                         ))}</Typography>
                     )}
@@ -219,7 +219,7 @@ function StickyHeadTable({ rows, columns, setClicked }) {
             return;
         } else {
             const data = await response.json();
-            toast.success(data.message);
+            toast.success("action completed");
             setClicked(prev => prev + 1)
         }
     };
@@ -280,13 +280,15 @@ function StickyHeadTable({ rows, columns, setClicked }) {
                                                 </Button>
                                                 <Button
                                                     style={{ textTransform: 'none' }}
-                                                    onClick={() => handleRequestButton(false, row.id)}
                                                 >
                                                     <GenericModal buttonName="Details">
                                                         <RequestDetailModal row={row} />
                                                     </GenericModal>
                                                 </Button>
-                                                <Button style={{ backgroundColor: '#F44336', color: 'white' }}>
+                                                <Button
+                                                    style={{ backgroundColor: '#F44336', color: 'white' }}
+                                                    onClick={() => handleRequestButton(false, row.id)}
+                                                >
                                                     Reject
                                                 </Button>
                                             </TableCell>

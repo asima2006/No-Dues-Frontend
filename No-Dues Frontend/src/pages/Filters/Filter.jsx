@@ -8,7 +8,8 @@ const Filter = ({ setParam, setClick }) => {
     role: '',
     academic_program: '',
     start_date: '',
-    end_date: ''
+    end_date: '',
+    status:null
   });
 
   const handleChange = (e) => {
@@ -20,8 +21,8 @@ const Filter = ({ setParam, setClick }) => {
   };
 
   const handleClick = () => {
-    setParam(filter);
     console.log(filter);
+    setParam(filter);
   };
 
   return (
@@ -51,9 +52,8 @@ const Filter = ({ setParam, setClick }) => {
             className="border rounded p-2"
           >
             <option value="">Select Status</option>
-            <option value="on hold">On hold</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
+            <option value="paid">paid</option>
+            <option value="pending">pending</option>
           </select>
         </div>
         <div className="flex items-center">

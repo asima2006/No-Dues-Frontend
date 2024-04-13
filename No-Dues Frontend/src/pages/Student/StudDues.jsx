@@ -81,7 +81,7 @@ const Filter = ({ setParam, setClicked }) => {
             >
               <option value="">Select Status</option>
               <option value="paid">paid</option>
-              <option value="DueStatus.PENDING">Pending</option>
+              <option value="pending">Pending</option>
               <option value="cancelled">cancelled</option>
             </select>
           </div>
