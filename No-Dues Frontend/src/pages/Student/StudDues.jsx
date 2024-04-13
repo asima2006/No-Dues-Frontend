@@ -26,8 +26,13 @@ import StudentNav from "../../components/StudentNav";
 
 const columns = [
   {
+    id:"department_name",
+    label:"Department",
+    minWidth:100
+  },
+  {
     id: "reason",
-    label: "Department",
+    label: "reason",
     minWidth: 100,
   },
   {
@@ -139,7 +144,6 @@ function StudentDetailModal({ id }) {
   );
 }
 
-
 function StickyHeadTable({ rows, columns, navigator, setClicked }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -147,6 +151,7 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
   const [selectedRow, setSelectedRow] = useState(null);
 
   const token = checkStudentToken();
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -154,16 +159,6 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-
-  const handleMenuOpen = (event, row) => {
-    setSelectedRow(row);
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSelectedRow(null);
   };
 
   return (
@@ -194,7 +189,7 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
                     return (
                       <TableRow hover tabIndex={-1} key={rowIndex}>
                         <TableCell>
-                          {rowIndex + 1}
+                          {page * rowsPerPage + rowIndex + 1}
                         </TableCell>
                         {columns.map((column) => {
                           return (
@@ -209,18 +204,15 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
                         <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                           <Button
                             style={{
-                              backgroundColor: row['request_sent']  ? '#008080' : 'green',
+                              backgroundColor: row['status'] !== 'paid' ? '#008080' : '#4062BB',
                               color: 'white'
                             }}
                           >
-                            {
-                              row['request_sent'] ?
-                            (
-                              <GenericModal buttonName="Create request" >
-                                <StudRequestsForm dueId={row['id']} />
-                              </GenericModal>
-                            ) : ("Request Sent")
-                            }
+                          {row['status'] !== 'paid' ?
+                            (<GenericModal buttonName="Create request" >
+                              <StudRequestsForm dueId={row['id']} />
+                            </GenericModal>) : row['request_sent'] ? 'Request sent' : row['status'] === 'paid' ? 'Paid' : 'Cancelled'
+                          }
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -232,7 +224,7 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
           <TablePagination
             rowsPerPageOptions={[1, 2, 5, 10]}
             component="div"
-            count={Math.floor(rows.length / rowsPerPage) + (rows.length % rowsPerPage > 0 ? 1 : 0)}
+            count={rows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -243,7 +235,6 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
     </div>
   );
 }
-
 
 export default function StudDues() {
   const [clicked, setClicked] = useState(0);
@@ -283,7 +274,7 @@ export default function StudDues() {
 
   return (
     <>
-      <StudentNav label={"MANAGE STUDENTS"} />
+      <StudentNav label={"My Dues"} />
       <div style={{ height: '90vh', width: '100%', padding: '4px' }}>
         <Filter param={param} setParam={setParam} setClicked={setClicked} />
         {rows ? <StickyHeadTable rows={rows} columns={columns} navigator={navigator} setClicked={setClicked} /> : <div>Loading... </div>}

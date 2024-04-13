@@ -215,12 +215,12 @@ function StickyHeadTable({ rows, columns, navigator, setClicked }) {
                                                     {rowIndex + 1}
                                                 </TableCell>
                                                 {columns.map((column) => {
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {row[column.id]}
-                                                        </TableCell>
-                                                    )
-                                                }
+                                                        return (
+                                                            <TableCell key={column.id} align={column.align}>
+                                                                {row[column.id]}
+                                                            </TableCell>
+                                                        )
+                                                    }
                                                 )}
                                                 <TableCell style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                                     <Button>
